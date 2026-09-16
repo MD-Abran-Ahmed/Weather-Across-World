@@ -54,8 +54,6 @@ GEMINI_API_KEY=your_gemini_api_key
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 ```
 
-Keep your real API keys in `.env`. Do not upload `.env` to GitHub.
-
 Then start the application:
 
 ```bash
