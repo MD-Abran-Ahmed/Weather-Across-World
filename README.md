@@ -2,7 +2,7 @@
 
 Weather Across World is a simple web application that helps you check weather information for places around the world.
 
-##### https://weather-across-world-84pa.vercel.app/
+##### https://weather-across-world-ten.vercel.app/
 
 You can search for a location and see its current weather conditions, temperature, humidity, wind, and other useful weather details. The project also includes an AI Weather Assistant that can help explain the weather and answer questions about it in a more natural way.
 
