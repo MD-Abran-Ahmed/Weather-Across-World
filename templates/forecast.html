@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Forecast & Trip Planner | Weather Across World</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forecast.css') }}">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar">
+
+        <div class="navbar-container">
+
+            <a href="/" class="logo">
+                <span class="logo-icon">🌤️</span>
+
+                <span>
+                    Weather Across World
+                </span>
+            </a>
+
+            <div class="nav-links">
+
+                <a href="/">
+                    Home
+                </a>
+
+                <a href="/#weather">
+                    Current Weather
+                </a>
+
+                <a href="/map">
+                    Weather Map
+                </a>
+
+                <a href="/#about">
+                    About
+                </a>
+
+            </div>
+
+            <button id="themeToggle" class="theme-button" type="button" aria-label="Toggle theme">
+
+                🌙
+
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="forecast-page">
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <section class="forecast-hero">
+
+            <div class="forecast-hero-content">
+
+                <div class="forecast-badge">
+                    📅 7-DAY FORECAST & TRIP PLANNER
+                </div>
+
+                <h1>
+                    Plan Your Trip
+                    <span>With Confidence</span>
+                </h1>
+
+                <p>
+                    Choose your destination to see the weather,
+                    travel suggestions and famous places to visit.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             LOCATION SELECTOR
+        ================================================== -->
+
+        <section class="location-selector-section">
+
+            <div class="section-heading">
+
+                <span class="section-heading-icon">
+                    🌍
+                </span>
+
+                <div>
+
+                    <h2>
+                        Choose Your Destination
+                    </h2>
+
+                    <p>
+                        Select a country, state or region, and city.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="location-selector-card">
+
+                <div class="selector-grid">
+
+                    <!-- COUNTRY -->
+
+                    <div class="selector-group">
+
+                        <label for="countrySelect">
+                            Country
+                        </label>
+
+                        <select id="countrySelect">
+
+                            <option value="">
+                                Loading countries...
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- STATE -->
+
+                    <div class="selector-group">
+
+                        <label for="stateSelect">
+                            State / Region
+                        </label>
+
+                        <select id="stateSelect" disabled>
+
+                            <option value="">
+                                Select country first
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CITY -->
+
+                    <div class="selector-group">
+
+                        <label for="citySelect">
+                            City
+                        </label>
+
+                        <select id="citySelect" disabled>
+
+                            <option value="">
+                                Select state / region first
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="selector-actions">
+
+                    <button id="forecastButton" class="forecast-button" type="button" disabled>
+
+                        🌤️ Show Forecast & Trip Guide
+
+                    </button>
+
+                    <div id="selectorStatus" class="selector-status">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FORECAST SECTION
+        ================================================== -->
+
+        <section id="forecastSection" class="forecast-section">
+
+            <div class="forecast-section-heading">
+
+                <div>
+
+                    <span class="forecast-section-label">
+                        YOUR DESTINATION
+                    </span>
+
+                    <h2>
+                        7-Day Weather Forecast
+                    </h2>
+
+                </div>
+
+                <div id="forecastLocation" class="forecast-location">
+                </div>
+
+            </div>
+
+
+            <div id="forecastCards" class="forecast-cards">
+            </div>
+
+
+            <div id="forecastEmpty" class="forecast-empty">
+
+                <div class="forecast-empty-icon">
+                    🧳
+                </div>
+
+                <h3>
+                    Select a destination
+                </h3>
+
+                <p>
+                    Choose a country, region and city to see
+                    your weather forecast and travel guide.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             TRIP SUGGESTIONS
+        ================================================== -->
+
+        <section id="tripSection" class="trip-section hidden">
+
+            <div class="trip-section-header">
+
+                <div>
+
+                    <span class="forecast-section-label">
+                        SMART TRIP GUIDE
+                    </span>
+
+                    <h2>
+                        Should You Go?
+                    </h2>
+
+                    <p id="tripSummary">
+                        Weather-based travel suggestions.
+                    </p>
+
+                </div>
+
+                <div class="trip-score">
+
+                    <span id="tripScoreIcon">
+                        ✈️
+                    </span>
+
+                    <strong id="tripScore">
+                        --
+                    </strong>
+
+                    <small>
+                        Trip Score
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div id="tripSuggestions" class="trip-suggestions">
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FAMOUS PLACES
+        ================================================== -->
+
+        <section id="placesSection" class="places-section hidden">
+
+            <div class="places-section-header">
+
+                <div>
+
+                    <span class="forecast-section-label">
+                        EXPLORE THE AREA
+                    </span>
+
+                    <h2>
+                        Famous Places Nearby
+                    </h2>
+
+                    <p>
+                        Popular attractions and interesting places
+                        around your selected destination.
+                    </p>
+
+                </div>
+
+                <div class="places-radius">
+                    📍 Within 25 km
+                </div>
+
+            </div>
+
+
+            <div id="placesLoading" class="places-loading hidden">
+
+                <div class="loading-spinner"></div>
+
+                <span>
+                    Finding famous places nearby...
+                </span>
+
+            </div>
+
+
+            <div id="placesGrid" class="places-grid">
+            </div>
+
+
+            <div id="placesEmpty" class="places-empty hidden">
+
+                <div>
+                    📍
+                </div>
+
+                <h3>
+                    No attractions found
+                </h3>
+
+                <p>
+                    We couldn't find tourist attractions for
+                    this location right now.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             TRAVEL TIPS
+        ================================================== -->
+
+        <section id="travelTipsSection" class="travel-tips-section hidden">
+
+            <div class="travel-tips-card">
+
+                <div class="travel-tips-icon">
+                    🎒
+                </div>
+
+                <div>
+
+                    <span class="forecast-section-label">
+                        TRAVEL TIP
+                    </span>
+
+                    <h3 id="packingTitle">
+                        What to pack
+                    </h3>
+
+                    <p id="packingAdvice">
+                        Your personalized packing suggestions
+                        will appear here.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             EMPTY / ERROR
+        ================================================== -->
+
+        <div id="forecastError" class="forecast-error hidden">
+
+            <span>
+                ⚠️
+            </span>
+
+            <p id="forecastErrorMessage">
+                Unable to load forecast.
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+
+        <div class="footer-content">
+
+            <h3>
+                🌤️ Weather Across World
+            </h3>
+
+            <p>
+                Weather information and smart travel suggestions
+                for destinations around the world.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="{{ url_for('static', filename='js/forecast.js') }}"></script>
+
+</body>
+
+</html>

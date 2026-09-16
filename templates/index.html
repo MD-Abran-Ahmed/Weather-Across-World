@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Weather Across World - Check weather anywhere in the world.">
+
+    <title>
+        Weather Across World
+    </title>
+
+
+    <!-- Google Font -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <!-- ================================= -->
+    <!-- NAVBAR -->
+    <!-- ================================= -->
+
+    <header class="navbar">
+
+        <div class="navbar-container">
+
+            <a href="/" class="logo">
+
+                <span class="logo-icon">
+                    🌍
+                </span>
+
+                <span>
+                    Weather Across World
+                </span>
+
+            </a>
+
+
+            <nav class="nav-links">
+
+                <a href="#home">
+                    Home
+                </a>
+
+                <a href="#weatherSection" id="currentWeatherNavLink">
+                    Current Weather
+                </a>
+
+                <a href="#about">
+                    About
+                </a>
+
+            </nav>
+            <button id="themeButton" class="theme-button" aria-label="Toggle theme">
+                🌙
+            </button>
+        </div>
+
+    </header>
+
+
+    <!-- ================================= -->
+    <!-- MAIN -->
+    <!-- ================================= -->
+
+    <main id="home">
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="badge">
+
+                    🌤️ Live Global Weather
+
+                </div>
+
+
+                <h1>
+
+                    Weather
+                    <span>Across</span>
+                    the World
+
+                </h1>
+
+
+                <p>
+
+                    Search any city and get real-time
+                    weather conditions and a 7-day forecast.
+
+                </p>
+
+
+                <!-- SEARCH -->
+
+                <div class="search-container">
+
+                    <div class="search-input-wrapper">
+
+                        <span class="search-icon">
+                            🔍
+                        </span>
+
+                        <input type="text" id="cityInput" placeholder="Search by city..." autocomplete="off">
+
+                    </div>
+
+
+                    <button id="searchButton" class="search-button">
+
+                        Search
+
+                    </button>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <button id="locationButton" class="location-button">
+
+                    📍 Use My Current Location
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- LOADING -->
+        <!-- ================================= -->
+
+        <div id="loading" class="loading hidden">
+
+            <div class="spinner"></div>
+
+            <p>
+                Getting weather data...
+            </p>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- ERROR -->
+        <!-- ================================= -->
+
+        <div id="errorBox" class="error-box hidden">
+
+            <span>
+                ⚠️
+            </span>
+
+            <p id="errorMessage">
+                Something went wrong.
+            </p>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- WEATHER -->
+        <!-- ================================= -->
+
+        <section id="weatherSection" class="weather-section hidden">
+
+
+            <!-- LOCATION HEADER -->
+
+            <div class="location-header">
+
+                <div>
+
+                    <p class="small-label">
+                        CURRENT WEATHER
+                    </p>
+
+                    <h2 id="cityName">
+                        Bengaluru
+                    </h2>
+
+                    <p id="countryName" class="country">
+                        India
+                    </p>
+
+                </div>
+
+
+                <div class="location-actions">
+
+                    <div class="last-updated">
+
+                        <span>
+                            Local time
+                        </span>
+
+                        <strong id="localTime">
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CURRENT WEATHER CARD -->
+
+            <div class="current-weather-card">
+
+
+                <!-- MAIN TEMPERATURE -->
+
+                <div class="temperature-section">
+
+                    <div id="weatherIcon" class="weather-icon">
+                        ☀️
+                    </div>
+
+
+                    <div>
+
+                        <div id="temperature" class="temperature">
+                            --°C
+                        </div>
+
+                        <p id="weatherDescription" class="weather-description">
+                            --
+                        </p>
+
+                        <p class="feels-like">
+
+                            Feels like
+                            <strong id="feelsLike">
+                                --°C
+                            </strong>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WEATHER DETAILS -->
+
+                <div class="weather-details">
+
+
+                    <div class="weather-detail">
+
+                        <div class="detail-icon">
+                            💧
+                        </div>
+
+                        <div>
+
+                            <p>
+                                Humidity
+                            </p>
+
+                            <strong id="humidity">
+                                --%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="weather-detail">
+
+                        <div class="detail-icon">
+                            🌬️
+                        </div>
+
+                        <div>
+
+                            <p>
+                                Wind Speed
+                            </p>
+
+                            <strong id="wind">
+                                -- km/h
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="weather-detail">
+
+                        <div class="detail-icon">
+                            🌧️
+                        </div>
+
+                        <div>
+
+                            <p>
+                                Precipitation
+                            </p>
+
+                            <strong id="rain">
+                                -- mm
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="weather-detail">
+
+                        <div class="detail-icon">
+                            ☁️
+                        </div>
+
+                        <div>
+
+                            <p>
+                                Cloud Cover
+                            </p>
+
+                            <strong id="cloudCover">
+                                --%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="weather-detail">
+
+                        <div class="detail-icon">
+                            🧭
+                        </div>
+
+                        <div>
+
+                            <p>
+                                Wind Direction
+                            </p>
+
+                            <strong id="windDirection">
+                                --°
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="weather-detail">
+
+                        <div class="detail-icon">
+                            🔽
+                        </div>
+
+                        <div>
+
+                            <p>
+                                Pressure
+                            </p>
+
+                            <strong id="pressure">
+                                -- hPa
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================================= -->
+            <!-- FORECAST -->
+            <!-- ================================= -->
+
+            <section id="forecast" class="forecast-section">
+                <!-- ================================= -->
+                <!-- TEMPERATURE GRAPH -->
+                <!-- ================================= -->
+
+                <section class="temperature-graph-section">
+
+                    <div class="section-title">
+
+                        <div>
+
+                            <p class="small-label">
+                                TEMPERATURE TREND
+                            </p>
+
+                            <h2>
+                                7-Day Temperature
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="temperature-graph-card">
+
+                        <div class="chart-wrapper">
+
+                            <canvas id="temperatureChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <div class="section-title">
+
+                    <div>
+
+
+                        <p class="small-label">
+                            NEXT 7 DAYS
+                        </p>
+
+                        <h2>
+                            Weather Forecast
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div id="forecastContainer" class="forecast-container">
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================= -->
+            <!-- SUNRISE / SUNSET -->
+            <!-- ================================= -->
+
+            <section class="sun-section">
+
+
+                <div class="sun-card">
+
+                    <div class="sun-icon">
+                        🌅
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Sunrise
+                        </p>
+
+                        <strong id="sunrise">
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sun-card">
+
+                    <div class="sun-icon">
+                        🌇
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Sunset
+                        </p>
+
+                        <strong id="sunset">
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- WELCOME SECTION -->
+        <!-- ================================= -->
+
+        <section id="about" class="features-section">
+
+            <div class="section-title center">
+
+                <p class="small-label">
+                    EXPLORE
+                </p>
+
+                <h2>
+                    Weather Made Simple
+                </h2>
+
+                <p>
+                    Get reliable weather information
+                    for cities around the world.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE CARDS -->
+
+            <div class="feature-grid">
+
+                <!-- GLOBAL COVERAGE -->
+
+                <div class="feature-card global-coverage-card" onclick="window.location.href='/map'">
+
+                    <div class="feature-icon">
+                        🌍
+                    </div>
+
+                    <h3>
+                        Global Coverage
+                    </h3>
+
+                    <p>
+                        Explore weather locations anywhere around the world.
+                    </p>
+
+                    <span class="location-action">
+                        Explore Map →
+                    </span>
+
+                </div>
+
+
+                <div class="feature-card forecast-feature-card" id="sevenDayForecastCard"
+                    onclick="window.location.href='/forecast'">
+
+                    <div class="feature-icon">
+                        📅
+                    </div>
+
+                    <h3>
+                        7-Day Forecast
+                    </h3>
+
+                    <p>
+                        Plan your week with a
+                        detailed weather forecast.
+                    </p>
+
+                    <span class="location-action">
+                        View 7-Day Forecast →
+                    </span>
+
+                </div>
+
+
+
+                <div class="feature-card location-card" id="currentLocationCard">
+                    <div class="feature-icon">📍</div>
+
+                    <h3>Current Location</h3>
+
+                    <p>
+                        Get weather information based on your location.
+                    </p>
+
+                    <span class="location-action">
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================================= -->
+    <!-- FOOTER -->
+    <!-- ================================= -->
+
+    <footer>
+
+        <div class="footer-content">
+
+            <div>
+
+                <h3>
+                    🌍 Weather Across World
+                </h3>
+
+                <p>
+                    Your simple global weather companion.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <p>
+                    Weather data powered by
+                    <strong>
+                        Open-Meteo
+                    </strong>
+                </p>
+
+                <p>
+                    © Abran | 2026
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <!-- ========================================= -->
+    <!-- FLOATING AI WEATHER ASSISTANT -->
+    <!-- ========================================= -->
+
+    <button id="aiFloatingButton" class="ai-floating-button" aria-label="Open Weather AI">
+        ✦
+    </button>
+
+
+    <div id="aiChatWindow" class="ai-chat-window">
+
+        <!-- AI HEADER -->
+
+        <div class="ai-chat-header">
+
+            <div class="ai-chat-title">
+
+                <div class="ai-avatar">
+                    ✦
+                </div>
+
+                <div>
+                    <strong>Weather AI</strong>
+                    <span>Online</span>
+                </div>
+
+            </div>
+
+
+            <button id="aiCloseButton" class="ai-close-button" aria-label="Close">
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- CHAT -->
+
+        <div id="aiMessages" class="ai-messages">
+
+            <div class="ai-message ai-message-bot">
+
+                <div class="ai-message-avatar">
+                    ✦
+                </div>
+
+                <div class="ai-message-content">
+
+                    Hi! 👋 I'm your Weather AI.
+
+                    <br><br>
+
+                    Search for a city and then ask me
+                    anything about the weather.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INPUT -->
+
+        <div class="ai-chat-input-area">
+
+            <input type="text" id="aiChatInput" placeholder="Ask about the weather..." autocomplete="off">
+
+            <button id="aiSendButton" aria-label="Send">
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

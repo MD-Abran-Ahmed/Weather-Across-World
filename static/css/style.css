@@ -1,0 +1,4483 @@
+/* =========================================================
+   WEATHER ACROSS WORLD
+========================================================= */
+/* =========================================================
+   LIGHT THEME
+========================================================= */
+
+body.dark {
+    background: #08111f;
+    color: #f8fafc;
+}
+
+/* Light theme */
+
+body:not(.dark) {
+    background: #f4f8fc;
+    color: #172033;
+}
+
+body:not(.dark) .navbar {
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom-color: #dce5ef;
+}
+
+body:not(.dark) .logo {
+    color: #172033;
+}
+
+body:not(.dark) .nav-links a {
+    color: #64748b;
+}
+
+body:not(.dark) .nav-links a:hover {
+    color: #2563eb;
+}
+
+body:not(.dark) .theme-button {
+    background: #ffffff;
+    border-color: #d6e0eb;
+    color: #172033;
+}
+
+body:not(.dark) .theme-button:hover {
+    background: #eef4fb;
+}
+
+
+/* Hero */
+
+body:not(.dark) .hero h1 {
+    color: #172033;
+}
+
+body:not(.dark) .hero p:not(.badge) {
+    color: #64748b;
+}
+
+
+/* Search */
+
+body:not(.dark) .search-container {
+    background: #ffffff;
+    border-color: #d6e0eb;
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.08);
+}
+
+body:not(.dark) .search-input-wrapper input {
+    color: #172033;
+}
+
+body:not(.dark) .search-input-wrapper input::placeholder {
+    color: #94a3b8;
+}
+
+
+/* Weather */
+
+body:not(.dark) .current-weather-card {
+    background: linear-gradient(135deg,
+            #ffffff,
+            #f1f6fb);
+
+    border-color: #d6e0eb;
+
+    box-shadow:
+        0 20px 55px rgba(15, 23, 42, 0.08);
+}
+
+body:not(.dark) .location-header h2 {
+    color: #172033;
+}
+
+body:not(.dark) .country {
+    color: #64748b;
+}
+
+body:not(.dark) .temperature {
+    color: #172033;
+}
+
+body:not(.dark) .weather-description {
+    color: #475569;
+}
+
+body:not(.dark) .feels-like {
+    color: #64748b;
+}
+
+
+/* Weather details */
+
+body:not(.dark) .weather-detail {
+    background: #ffffff;
+    border-color: #dce5ef;
+}
+
+body:not(.dark) .weather-detail:hover {
+    background: #f1f6fb;
+    border-color: #b8c9dc;
+}
+
+body:not(.dark) .detail-icon {
+    background: #eef4fb;
+}
+
+body:not(.dark) .weather-detail p {
+    color: #64748b;
+}
+
+body:not(.dark) .weather-detail strong {
+    color: #172033;
+}
+
+
+/* Forecast */
+
+body:not(.dark) .forecast-card {
+    background: #ffffff;
+    border-color: #dce5ef;
+}
+
+body:not(.dark) .forecast-card:hover {
+    background: #f1f6fb;
+    border-color: #b8c9dc;
+}
+
+body:not(.dark) .forecast-day {
+    color: #475569;
+}
+
+body:not(.dark) .forecast-temperature,
+body:not(.dark) .forecast-max {
+    color: #172033;
+}
+
+body:not(.dark) .forecast-description,
+body:not(.dark) .forecast-min,
+body:not(.dark) .forecast-rain {
+    color: #64748b;
+}
+
+
+/* Sunrise / Sunset */
+
+body:not(.dark) .sun-card {
+    background: #ffffff;
+    border-color: #dce5ef;
+}
+
+body:not(.dark) .sun-card:hover {
+    background: #f1f6fb;
+}
+
+body:not(.dark) .sun-icon {
+    background: #eef4fb;
+}
+
+body:not(.dark) .sun-card p {
+    color: #64748b;
+}
+
+body:not(.dark) .sun-card strong {
+    color: #172033;
+}
+
+
+/* Feature cards */
+
+body:not(.dark) .feature-card {
+    background: #ffffff;
+    border-color: #dce5ef;
+}
+
+body:not(.dark) .feature-card:hover {
+    background: #f1f6fb;
+}
+
+body:not(.dark) .feature-card h3 {
+    color: #172033;
+}
+
+body:not(.dark) .feature-card p {
+    color: #64748b;
+}
+
+body:not(.dark) .feature-icon {
+    background: #eef4fb;
+}
+
+
+/* Footer */
+
+body:not(.dark) footer {
+    background: #eaf1f8;
+    border-top-color: #d6e0eb;
+}
+
+body:not(.dark) .footer-content h3 {
+    color: #334155;
+}
+
+body:not(.dark) .footer-content p {
+    color: #64748b;
+}
+
+body:not(.dark) .footer-content strong {
+    color: #475569;
+}
+
+
+/* =========================================================
+   1. RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+
+    background: #08111f;
+    color: #f8fafc;
+
+    min-height: 100vh;
+
+    line-height: 1.5;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   2. SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #08111f;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #263852;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+}
+
+
+/* =========================================================
+   3. NAVBAR
+========================================================= */
+
+.navbar {
+    width: 100%;
+
+    height: 82px;
+
+    background: rgba(10, 22, 39, 0.96);
+
+    border-bottom: 1px solid #1d2d44;
+
+    position: relative;
+
+    z-index: 100;
+}
+
+.navbar-container {
+    width: min(1400px, 92%);
+
+    height: 100%;
+
+    margin: 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+
+/* =========================================================
+   4. LOGO
+========================================================= */
+
+.logo {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 1.25rem;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+.logo-icon {
+    width: 44px;
+
+    height: 44px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #38bdf8);
+
+    font-size: 1.4rem;
+
+    box-shadow:
+        0 8px 25px rgba(37, 99, 235, 0.22);
+}
+
+
+/* =========================================================
+   5. NAVIGATION
+========================================================= */
+
+.nav-links {
+    display: flex;
+
+    align-items: center;
+
+    gap: 36px;
+}
+
+.nav-links a {
+    position: relative;
+
+    color: #8fa3bd;
+
+    text-decoration: none;
+
+    font-size: 0.92rem;
+
+    font-weight: 600;
+
+    transition:
+        color 0.2s ease;
+}
+
+.nav-links a::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: -7px;
+
+    width: 0;
+
+    height: 2px;
+
+    border-radius: 10px;
+
+    background: #3b82f6;
+
+    transition:
+        width 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: #ffffff;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+
+/* =========================================================
+   6. THEME BUTTON
+========================================================= */
+
+.theme-button {
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 13px;
+
+    border: 1px solid #2b3d57;
+
+    background: #14243a;
+
+    color: #ffffff;
+
+    font-size: 1.1rem;
+
+    cursor: pointer;
+
+    display: grid;
+
+    place-items: center;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.theme-button:hover {
+    background: #1c304b;
+
+    border-color: #426084;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   7. MAIN
+========================================================= */
+
+main {
+    width: min(1180px, 92%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   8. HERO
+========================================================= */
+
+.hero {
+    position: relative;
+
+    padding:
+        75px 0 55px;
+
+    text-align: center;
+
+    overflow: visible;
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 420px;
+
+    height: 420px;
+
+    top: -170px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(circle,
+            rgba(37, 99, 235, 0.13),
+            transparent 68%);
+
+    pointer-events: none;
+
+    z-index: -1;
+}
+
+.hero-content {
+    width: 100%;
+
+    max-width: 850px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   9. HERO BADGE
+========================================================= */
+
+.badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        7px 13px;
+
+    margin-bottom: 20px;
+
+    border:
+        1px solid rgba(59, 130, 246, 0.25);
+
+    border-radius: 999px;
+
+    background:
+        rgba(37, 99, 235, 0.08);
+
+    color: #60a5fa;
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   10. HERO TITLE
+========================================================= */
+
+.hero h1 {
+    font-size:
+        clamp(2.6rem,
+            6vw,
+            4.8rem);
+
+    line-height: 1.05;
+
+    letter-spacing: -2.5px;
+
+    font-weight: 800;
+
+    color: #f8fafc;
+
+    margin-bottom: 20px;
+}
+
+.hero h1 span {
+    color: #3b82f6;
+}
+
+
+/* =========================================================
+   11. HERO DESCRIPTION
+========================================================= */
+
+.hero p:not(.badge) {
+    max-width: 650px;
+
+    margin:
+        0 auto 32px;
+
+    color: #8fa3bd;
+
+    font-size: 1.02rem;
+}
+
+
+/* =========================================================
+   12. SEARCH CONTAINER
+========================================================= */
+
+.search-container {
+    width: min(760px, 100%);
+
+    margin: 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 6px;
+
+    background: #101d31;
+
+    border:
+        1px solid #263852;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.18);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.search-container:focus-within {
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.09),
+        0 15px 40px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =========================================================
+   13. SEARCH INPUT
+========================================================= */
+
+.search-input-wrapper {
+    flex: 1;
+
+    min-width: 0;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding:
+        0 15px;
+}
+
+.search-icon {
+    font-size: 1rem;
+
+    opacity: 0.65;
+}
+
+.search-input-wrapper input {
+    width: 100%;
+
+    height: 100%;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 0.98rem;
+}
+
+.search-input-wrapper input::placeholder {
+    color: #60748e;
+}
+
+
+/* =========================================================
+   14. SEARCH BUTTON
+========================================================= */
+
+.search-button {
+    height: 52px;
+
+    padding:
+        0 28px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #3b82f6);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 0.92rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.2);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.search-button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.3);
+}
+
+.search-button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   15. LOCATION BUTTON
+========================================================= */
+
+.location-button {
+    margin-top: 15px;
+
+    padding:
+        9px 16px;
+
+    border:
+        1px solid #2a3d57;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: #8fa3bd;
+
+    font-family: inherit;
+
+    font-size: 0.84rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.location-button:hover {
+    background: #13243b;
+
+    color: #ffffff;
+
+    border-color: #405775;
+}
+
+
+/* =========================================================
+   16. LOADING
+========================================================= */
+
+.loading {
+    min-height: 80px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    color: #8fa3bd;
+
+    font-size: 0.9rem;
+}
+
+.loading.hidden {
+    display: none;
+}
+
+.spinner {
+    width: 20px;
+
+    height: 20px;
+
+    border:
+        2px solid #263852;
+
+    border-top-color: #3b82f6;
+
+    border-radius: 50%;
+
+    animation:
+        spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   17. ERROR
+========================================================= */
+
+.error-box {
+    max-width: 700px;
+
+    margin:
+        0 auto 25px;
+
+    padding:
+        14px 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    border:
+        1px solid rgba(239, 68, 68, 0.25);
+
+    border-radius: 12px;
+
+    background:
+        rgba(239, 68, 68, 0.07);
+
+    color: #fca5a5;
+
+    font-size: 0.9rem;
+}
+
+.error-box.hidden {
+    display: none;
+}
+
+
+/* =========================================================
+   18. HIDDEN
+========================================================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   19. WEATHER SECTION
+========================================================= */
+
+.weather-section {
+    width: 100%;
+
+    margin-top: 10px;
+
+    /*
+       IMPORTANT:
+       No scrollIntoView behavior here.
+       No large transform animation.
+    */
+}
+
+
+/* =========================================================
+   20. LOCATION HEADER
+========================================================= */
+
+.location-header {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    padding:
+        15px 4px 25px;
+}
+
+.small-label {
+    color: #3b82f6;
+
+    font-size: 0.72rem;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 7px;
+}
+
+.location-header h2 {
+    font-size:
+        clamp(1.9rem,
+            4vw,
+            2.6rem);
+
+    line-height: 1.1;
+
+    letter-spacing: -0.8px;
+
+    margin-bottom: 4px;
+}
+
+.country {
+    color: #8fa3bd;
+
+    font-size: 0.94rem;
+}
+
+.last-updated {
+    text-align: right;
+
+    color: #60748e;
+
+    font-size: 0.78rem;
+}
+
+.last-updated strong {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #b5c3d4;
+
+    font-size: 0.9rem;
+}
+
+.location-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.return-location-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 15px;
+    border-radius: 9999px;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    background: rgba(30, 58, 138, 0.25);
+    color: #60a5fa;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+}
+
+.return-location-btn:hover {
+    background: #2563eb;
+    border-color: #3b82f6;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+body:not(.dark) .return-location-btn {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+body:not(.dark) .return-location-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   21. CURRENT WEATHER CARD
+========================================================= */
+
+.current-weather-card {
+    background:
+        linear-gradient(135deg,
+            #111f35,
+            #0f1b2e);
+
+    border:
+        1px solid #263852;
+
+    border-radius: 24px;
+
+    padding:
+        35px;
+
+    box-shadow:
+        0 20px 55px rgba(0, 0, 0, 0.18);
+
+    overflow: hidden;
+
+    position: relative;
+}
+
+.current-weather-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+
+    height: 300px;
+
+    right: -120px;
+
+    top: -150px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(59, 130, 246, 0.06);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   22. TEMPERATURE SECTION
+========================================================= */
+
+.temperature-section {
+    min-height: 210px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 50px;
+
+    padding-bottom: 30px;
+}
+
+
+/* =========================================================
+   23. WEATHER ICON
+========================================================= */
+
+.weather-icon {
+    width: 135px;
+
+    height: 135px;
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 5.5rem;
+
+    line-height: 1;
+
+    /*
+       One-time subtle appearance.
+       No continuous floating.
+    */
+
+    animation:
+        iconAppear 0.35s ease-out;
+}
+
+@keyframes iconAppear {
+    from {
+        opacity: 0;
+
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: scale(1);
+    }
+}
+
+
+/* =========================================================
+   24. TEMPERATURE
+========================================================= */
+
+.temperature {
+    font-size:
+        clamp(4rem,
+            8vw,
+            6rem);
+
+    line-height: 0.95;
+
+    font-weight: 800;
+
+    letter-spacing: -4px;
+
+    color: #ffffff;
+
+    animation:
+        textAppear 0.3s ease-out;
+}
+
+@keyframes textAppear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.weather-description {
+    margin-top: 12px;
+
+    color: #c4d0df;
+
+    font-size: 1.12rem;
+
+    text-transform: capitalize;
+}
+
+.feels-like {
+    margin-top: 5px;
+
+    color: #687e99;
+
+    font-size: 0.85rem;
+}
+
+.feels-like strong {
+    color: #a9b8ca;
+}
+
+
+/* =========================================================
+   25. WEATHER DETAILS
+========================================================= */
+
+.weather-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 14px;
+
+    padding-top: 5px;
+}
+
+
+/* =========================================================
+   26. DETAIL CARD
+========================================================= */
+
+.weather-detail {
+    min-height: 105px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding:
+        17px 19px;
+
+    background: rgba(9, 19, 34, 0.55);
+
+    border:
+        1px solid #22344d;
+
+    border-radius: 16px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.weather-detail:hover {
+    background: #14243a;
+
+    border-color: #34516f;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   27. DETAIL ICON
+========================================================= */
+
+.detail-icon {
+    width: 52px;
+
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 14px;
+
+    background: #172943;
+
+    font-size: 1.4rem;
+}
+
+
+/* =========================================================
+   28. DETAIL TEXT
+========================================================= */
+
+.weather-detail>div:last-child {
+    min-width: 0;
+}
+
+.weather-detail p {
+    color: #71869f;
+
+    font-size: 0.78rem;
+
+    margin-bottom: 2px;
+}
+
+.weather-detail strong {
+    color: #f1f5f9;
+
+    font-size: 1.12rem;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   29. FORECAST SECTION
+========================================================= */
+
+.forecast-section {
+    padding-top: 70px;
+
+    margin-top: 15px;
+}
+
+.section-title {
+    margin-bottom: 25px;
+}
+
+.section-title h2 {
+    font-size:
+        clamp(1.8rem,
+            4vw,
+            2.5rem);
+
+    line-height: 1.15;
+
+    letter-spacing: -0.8px;
+}
+
+
+/* =========================================================
+   30. FORECAST CONTAINER
+========================================================= */
+
+.forecast-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 12px;
+}
+
+
+/* =========================================================
+   31. FORECAST CARD
+========================================================= */
+
+.forecast-card {
+    min-height: 205px;
+
+    padding:
+        20px 12px;
+
+    text-align: center;
+
+    background: #101d31;
+
+    border:
+        1px solid #253850;
+
+    border-radius: 17px;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.forecast-card:hover {
+    transform: translateY(-3px);
+
+    background: #14243a;
+
+    border-color: #3a5574;
+}
+
+
+/* =========================================================
+   32. FORECAST DAY
+========================================================= */
+
+.forecast-day {
+    color: #a8b8ca;
+
+    font-size: 0.82rem;
+
+    font-weight: 700;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   33. FORECAST ICON
+========================================================= */
+
+.forecast-icon {
+    font-size: 2.5rem;
+
+    line-height: 1;
+
+    margin:
+        5px 0 18px;
+
+    /* No floating animation */
+    animation: none;
+}
+
+
+/* =========================================================
+   34. FORECAST TEMPERATURE
+========================================================= */
+
+.forecast-temperature {
+    color: #ffffff;
+
+    font-size: 1.1rem;
+
+    font-weight: 750;
+
+    margin-bottom: 5px;
+}
+
+.forecast-description {
+    color: #6e829b;
+
+    font-size: 0.72rem;
+
+    line-height: 1.35;
+
+    text-transform: capitalize;
+}
+
+
+/* =========================================================
+   35. SUNRISE / SUNSET
+========================================================= */
+
+.sun-section {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+
+    margin-top: 25px;
+
+    margin-bottom: 70px;
+}
+
+.sun-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding:
+        20px 22px;
+
+    background: #101d31;
+
+    border:
+        1px solid #253850;
+
+    border-radius: 17px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.sun-card:hover {
+    background: #14243a;
+
+    border-color: #3a5574;
+}
+
+.sun-icon {
+    width: 52px;
+
+    height: 52px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 14px;
+
+    background: #172943;
+
+    font-size: 1.7rem;
+
+    animation: none;
+}
+
+.sun-card p {
+    color: #71869f;
+
+    font-size: 0.78rem;
+
+    margin-bottom: 3px;
+}
+
+.sun-card strong {
+    color: #f1f5f9;
+
+    font-size: 1.05rem;
+}
+
+
+/* =========================================================
+   36. FEATURES / ABOUT
+========================================================= */
+
+.features-section {
+    padding:
+        35px 0 85px;
+}
+
+.section-title.center {
+    text-align: center;
+
+    max-width: 650px;
+
+    margin:
+        0 auto 35px;
+}
+
+.section-title.center h2 {
+    margin-bottom: 10px;
+}
+
+.section-title.center>p:last-child {
+    color: #71869f;
+
+    font-size: 0.92rem;
+}
+
+
+/* =========================================================
+   37. FEATURE GRID
+========================================================= */
+
+.feature-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   38. FEATURE CARD
+========================================================= */
+
+.feature-card {
+    padding:
+        28px 24px;
+
+    text-align: center;
+
+    background: #101d31;
+
+    border:
+        1px solid #253850;
+
+    border-radius: 19px;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+
+    background: #14243a;
+
+    border-color: #385675;
+}
+
+
+/* =========================================================
+   39. FEATURE ICON
+========================================================= */
+
+.feature-icon {
+    width: 58px;
+
+    height: 58px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin:
+        0 auto 17px;
+
+    border-radius: 16px;
+
+    background: #172943;
+
+    font-size: 1.65rem;
+}
+
+
+/* =========================================================
+   40. FEATURE TEXT
+========================================================= */
+
+.feature-card h3 {
+    color: #f8fafc;
+
+    font-size: 1rem;
+
+    margin-bottom: 8px;
+}
+
+.feature-card p {
+    color: #71869f;
+
+    font-size: 0.82rem;
+
+    line-height: 1.6;
+}
+
+/* Space after Temperature Trend graph */
+.temperature-graph-card {
+    margin-bottom: 50px;
+}
+
+.temperature-graph-card {
+    margin-bottom: 40px;
+}
+
+@media (max-width: 650px) {
+    .temperature-graph-card {
+        margin-bottom: 35px;
+    }
+}
+
+@media (max-width: 400px) {
+    .temperature-graph-card {
+        margin-bottom: 30px;
+    }
+}
+
+/* =========================================================
+   41. FOOTER
+========================================================= */
+
+footer {
+    width: 100%;
+
+    background: #07101d;
+
+    border-top:
+        1px solid #1d2d44;
+
+    padding:
+        35px 20px;
+}
+
+.footer-content {
+    width: min(1180px, 92%);
+
+    margin: 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+.footer-content h3 {
+    color: #dbe7f5;
+
+    font-size: 0.95rem;
+
+    margin-bottom: 5px;
+}
+
+.footer-content p {
+    color: #5f748d;
+
+    font-size: 0.75rem;
+}
+
+.footer-content>div:last-child {
+    text-align: right;
+}
+
+.footer-content strong {
+    color: #8298b1;
+}
+
+
+/* =========================================================
+   42. BUTTON STATES
+========================================================= */
+
+button:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none !important;
+}
+
+
+/* =========================================================
+   43. VERY SUBTLE RESULT UPDATE
+========================================================= */
+
+/*
+   This is intentionally small.
+   It does NOT move the page.
+*/
+
+.weather-section:not(.hidden) {
+    animation:
+        resultFade 0.25s ease-out;
+}
+
+@keyframes resultFade {
+    from {
+        opacity: 0.7;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   44. TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .forecast-container {
+        grid-template-columns:
+            repeat(4, 1fr);
+    }
+
+    .weather-details {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .feature-grid {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   45. TABLET / SMALL LAPTOP
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .navbar-container {
+        width: 94%;
+    }
+
+    .nav-links {
+        gap: 20px;
+    }
+
+    .hero {
+        padding:
+            55px 0 40px;
+    }
+
+    .temperature-section {
+        gap: 30px;
+    }
+
+    .current-weather-card {
+        padding: 25px;
+    }
+
+    .forecast-container {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .feature-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .feature-card {
+        max-width: 600px;
+
+        width: 100%;
+
+        margin: 0 auto;
+    }
+
+}
+
+
+/* =========================================================
+   46. MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .navbar {
+        height: 70px;
+    }
+
+    .navbar-container {
+        width: 94%;
+    }
+
+    .logo {
+        font-size: 0.95rem;
+    }
+
+    .logo-icon {
+        width: 38px;
+
+        height: 38px;
+
+        border-radius: 11px;
+
+        font-size: 1.15rem;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .theme-button {
+        width: 39px;
+
+        height: 39px;
+
+        border-radius: 11px;
+    }
+
+
+    /* Hero */
+
+    .hero {
+        padding:
+            42px 0 32px;
+    }
+
+    .hero h1 {
+        font-size: 2.35rem;
+
+        letter-spacing: -1.5px;
+    }
+
+    .hero p:not(.badge) {
+        font-size: 0.9rem;
+
+        margin-bottom: 25px;
+    }
+
+
+    /* Search */
+
+    .search-container {
+        flex-direction: column;
+
+        padding: 7px;
+
+        gap: 6px;
+    }
+
+    .search-input-wrapper {
+        width: 100%;
+    }
+
+    .search-button {
+        width: 100%;
+    }
+
+
+    /* Location */
+
+    .location-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 12px;
+
+        padding:
+            10px 2px 20px;
+    }
+
+    .last-updated {
+        text-align: left;
+    }
+
+
+    /* Current weather */
+
+    .current-weather-card {
+        padding:
+            24px 16px;
+
+        border-radius: 20px;
+    }
+
+    .temperature-section {
+        flex-direction: column;
+
+        gap: 10px;
+
+        min-height: 0;
+
+        padding-bottom: 25px;
+
+        text-align: center;
+    }
+
+    .weather-icon {
+        width: 100px;
+
+        height: 100px;
+
+        font-size: 4.2rem;
+    }
+
+    .temperature {
+        font-size: 4rem;
+
+        letter-spacing: -2.5px;
+    }
+
+    .weather-description {
+        font-size: 1rem;
+    }
+
+
+    /* Details */
+
+    .weather-details {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+    }
+
+    .weather-detail {
+        min-height: 110px;
+
+        padding:
+            15px 10px;
+
+        flex-direction: column;
+
+        justify-content: center;
+
+        text-align: center;
+
+        gap: 8px;
+    }
+
+    .detail-icon {
+        width: 44px;
+
+        height: 44px;
+
+        border-radius: 12px;
+
+        font-size: 1.25rem;
+    }
+
+    .weather-detail p {
+        font-size: 0.72rem;
+    }
+
+    .weather-detail strong {
+        font-size: 1rem;
+    }
+
+
+    /* Forecast */
+
+    .forecast-section {
+        padding-top: 55px;
+    }
+
+    .forecast-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+    }
+
+    .forecast-card {
+        min-height: 190px;
+
+        padding:
+            18px 10px;
+    }
+
+
+    /* Sun */
+
+    .sun-section {
+        grid-template-columns:
+            1fr;
+
+        margin-bottom: 55px;
+    }
+
+
+    /* Footer */
+
+    .footer-content {
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+    .footer-content>div:last-child {
+        text-align: center;
+    }
+
+}
+
+
+/* =========================================================
+   47. SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    main {
+        width: 94%;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+    }
+
+    .weather-details {
+        grid-template-columns:
+            1fr;
+    }
+
+    .weather-detail {
+        flex-direction: row;
+
+        justify-content: flex-start;
+
+        text-align: left;
+
+        padding:
+            15px 18px;
+    }
+
+    .forecast-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   48. REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+
+        transition: none !important;
+
+        scroll-behavior: auto !important;
+    }
+
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-left: auto;
+}
+
+/* =========================================
+   CURRENT LOCATION CARD
+   ========================================= */
+
+.location-card {
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.location-card:hover {
+    transform: translateY(-5px);
+}
+
+.location-action {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   MOBILE VERSION
+   Fixes:
+   - Search button never covers input
+   - Proper mobile spacing
+   - Responsive navbar
+   - Better weather cards
+   - Better forecast layout
+========================================================= */
+
+@media (max-width: 650px) {
+
+    /* =========================
+       GLOBAL
+    ========================= */
+
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    main {
+        width: 92%;
+        margin: 0 auto;
+    }
+
+
+    /* =========================
+       NAVBAR
+    ========================= */
+
+    .navbar {
+        height: 68px;
+    }
+
+    .navbar-container {
+        width: 92%;
+        gap: 10px;
+    }
+
+    .logo {
+        min-width: 0;
+        max-width: 75%;
+        font-size: 0.88rem;
+        gap: 8px;
+    }
+
+    .logo-icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+        width: 100%;
+        padding: 38px 0 28px;
+    }
+
+    .hero-content {
+        width: 100%;
+    }
+
+    .badge {
+        max-width: 100%;
+        padding: 6px 11px;
+        margin-bottom: 16px;
+        font-size: 0.7rem;
+    }
+
+    .hero h1 {
+        font-size: clamp(2rem, 10vw, 2.6rem);
+        line-height: 1.08;
+        letter-spacing: -1.5px;
+        margin-bottom: 16px;
+    }
+
+    .hero p:not(.badge) {
+        width: 100%;
+        font-size: 0.88rem;
+        line-height: 1.55;
+        margin: 0 auto 22px;
+    }
+
+
+    /* =====================================================
+       SEARCH
+       IMPORTANT:
+       Button is below input on mobile.
+       It cannot cover or overlap the input.
+    ===================================================== */
+
+    .search-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+
+        padding: 7px;
+
+        background: #101d31;
+        border: 1px solid #263852;
+        border-radius: 15px;
+
+        /* Prevent children from overflowing */
+        overflow: hidden;
+    }
+
+    .search-input-wrapper {
+        width: 100%;
+        min-width: 0;
+        height: 50px;
+
+        display: flex;
+        align-items: center;
+
+        padding: 0 12px;
+        gap: 8px;
+
+        flex: none;
+    }
+
+    .search-icon {
+        flex-shrink: 0;
+        font-size: 0.95rem;
+    }
+
+    .search-input-wrapper input {
+        width: 100%;
+        min-width: 0;
+        height: 50px;
+
+        font-size: 0.9rem;
+    }
+
+    .search-button {
+        width: 100%;
+        height: 50px;
+
+        flex-shrink: 0;
+
+        padding: 0 18px;
+
+        border-radius: 11px;
+
+        font-size: 0.9rem;
+
+        /* Prevent button from covering input */
+        position: static;
+        margin: 0;
+    }
+
+
+    /* =========================
+       LOCATION BUTTON
+    ========================= */
+
+    .location-button {
+        width: 100%;
+        max-width: 300px;
+
+        margin-top: 13px;
+
+        padding: 10px 14px;
+
+        font-size: 0.8rem;
+    }
+
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading {
+        min-height: 70px;
+        font-size: 0.82rem;
+    }
+
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error-box {
+        width: 100%;
+        padding: 12px 14px;
+
+        font-size: 0.82rem;
+        text-align: center;
+    }
+
+
+    /* =========================
+       WEATHER SECTION
+    ========================= */
+
+    .weather-section {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+
+    /* =========================
+       LOCATION HEADER
+    ========================= */
+
+    .location-header {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        gap: 10px;
+
+        padding: 10px 2px 18px;
+    }
+
+    .small-label {
+        font-size: 0.65rem;
+        letter-spacing: 1.6px;
+        margin-bottom: 6px;
+    }
+
+    .location-header h2 {
+        font-size: 1.8rem;
+        letter-spacing: -0.5px;
+    }
+
+    .country {
+        font-size: 0.82rem;
+    }
+
+    .last-updated {
+        width: 100%;
+        text-align: left;
+
+        font-size: 0.72rem;
+    }
+
+    .last-updated strong {
+        font-size: 0.82rem;
+    }
+
+
+    /* =========================
+       CURRENT WEATHER CARD
+    ========================= */
+
+    .current-weather-card {
+        width: 100%;
+
+        padding: 22px 14px;
+
+        border-radius: 19px;
+    }
+
+
+    /* =========================
+       TEMPERATURE
+    ========================= */
+
+    .temperature-section {
+        width: 100%;
+
+        min-height: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        justify-content: center;
+        align-items: center;
+
+        gap: 5px;
+
+        padding-bottom: 22px;
+
+        text-align: center;
+    }
+
+    .weather-icon {
+        width: 85px;
+        height: 85px;
+
+        font-size: 3.8rem;
+    }
+
+    .temperature {
+        font-size: clamp(3.3rem, 16vw, 4.2rem);
+
+        letter-spacing: -2.5px;
+
+        white-space: nowrap;
+    }
+
+    .weather-description {
+        margin-top: 8px;
+        font-size: 0.95rem;
+    }
+
+    .feels-like {
+        margin-top: 4px;
+        font-size: 0.78rem;
+    }
+
+
+    /* =========================
+       WEATHER DETAILS
+    ========================= */
+
+    .weather-details {
+        width: 100%;
+
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
+
+        padding-top: 3px;
+    }
+
+    .weather-detail {
+        width: 100%;
+        min-width: 0;
+        min-height: 105px;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+        justify-content: center;
+
+        gap: 7px;
+
+        padding: 13px 8px;
+
+        border-radius: 14px;
+
+        text-align: center;
+
+        overflow: hidden;
+    }
+
+    .detail-icon {
+        width: 42px;
+        height: 42px;
+
+        flex-shrink: 0;
+
+        border-radius: 11px;
+
+        font-size: 1.15rem;
+    }
+
+    .weather-detail>div:last-child {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .weather-detail p {
+        font-size: 0.68rem;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .weather-detail strong {
+        display: block;
+
+        font-size: 0.9rem;
+
+        white-space: nowrap;
+    }
+
+
+    /* =========================
+       FORECAST
+    ========================= */
+
+    .forecast-section {
+        width: 100%;
+
+        padding-top: 48px;
+        margin-top: 0;
+    }
+
+    .section-title {
+        margin-bottom: 18px;
+    }
+
+    .section-title h2 {
+        font-size: 1.75rem;
+    }
+
+    .forecast-container {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
+    }
+
+    .forecast-card {
+        width: 100%;
+        min-width: 0;
+        min-height: 175px;
+
+        padding: 16px 8px;
+
+        border-radius: 14px;
+    }
+
+    .forecast-day {
+        font-size: 0.72rem;
+        margin-bottom: 13px;
+    }
+
+    .forecast-icon {
+        font-size: 2.15rem;
+        margin: 4px 0 14px;
+    }
+
+    .forecast-temperature {
+        font-size: 0.95rem;
+    }
+
+    .forecast-description {
+        font-size: 0.65rem;
+
+        padding: 0 3px;
+    }
+
+
+    /* =========================
+       SUNRISE / SUNSET
+    ========================= */
+
+    .sun-section {
+        width: 100%;
+
+        display: grid;
+        grid-template-columns: 1fr;
+
+        gap: 9px;
+
+        margin-top: 20px;
+        margin-bottom: 48px;
+    }
+
+    .sun-card {
+        width: 100%;
+
+        padding: 16px;
+
+        gap: 13px;
+
+        border-radius: 14px;
+    }
+
+    .sun-icon {
+        width: 45px;
+        height: 45px;
+
+        flex-shrink: 0;
+
+        border-radius: 11px;
+
+        font-size: 1.4rem;
+    }
+
+    .sun-card p {
+        font-size: 0.7rem;
+    }
+
+    .sun-card strong {
+        font-size: 0.92rem;
+    }
+
+
+    /* =========================
+       FEATURES / ABOUT
+    ========================= */
+
+    .features-section {
+        padding: 25px 0 60px;
+    }
+
+    .section-title.center {
+        margin-bottom: 25px;
+    }
+
+    .section-title.center h2 {
+        font-size: 1.75rem;
+    }
+
+    .section-title.center>p:last-child {
+        font-size: 0.82rem;
+        line-height: 1.55;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+    .feature-card {
+        width: 100%;
+        max-width: none;
+
+        padding: 23px 18px;
+
+        border-radius: 16px;
+    }
+
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+
+        margin-bottom: 13px;
+
+        border-radius: 13px;
+
+        font-size: 1.4rem;
+    }
+
+    .feature-card h3 {
+        font-size: 0.95rem;
+    }
+
+    .feature-card p {
+        font-size: 0.78rem;
+    }
+
+
+    /* =========================
+       CURRENT LOCATION CARD
+    ========================= */
+
+    .location-card {
+        cursor: pointer;
+    }
+
+    .location-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .location-action {
+        margin-top: 9px;
+        font-size: 0.75rem;
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+        padding: 28px 15px;
+    }
+
+    .footer-content {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 18px;
+
+        text-align: center;
+    }
+
+    .footer-content>div:last-child {
+        text-align: center;
+    }
+
+    .footer-content h3 {
+        font-size: 0.85rem;
+    }
+
+    .footer-content p {
+        font-size: 0.68rem;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 400px) {
+
+    main {
+        width: 94%;
+    }
+
+    .hero {
+        padding-top: 32px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p:not(.badge) {
+        font-size: 0.84rem;
+    }
+
+    .search-container {
+        padding: 6px;
+    }
+
+    .search-input-wrapper {
+        height: 48px;
+    }
+
+    .search-input-wrapper input {
+        height: 48px;
+        font-size: 0.85rem;
+    }
+
+    .search-button {
+        height: 48px;
+    }
+
+    .current-weather-card {
+        padding: 20px 11px;
+    }
+
+    .temperature {
+        font-size: 3.5rem;
+    }
+
+    .weather-details {
+        grid-template-columns: 1fr;
+    }
+
+    .weather-detail {
+        min-height: 78px;
+
+        flex-direction: row;
+
+        justify-content: flex-start;
+
+        text-align: left;
+
+        padding: 12px 15px;
+    }
+
+    .weather-detail>div:last-child {
+        width: auto;
+    }
+
+    .weather-detail p {
+        white-space: normal;
+    }
+
+    .forecast-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .forecast-card {
+        min-height: 165px;
+    }
+
+}
+
+/* =========================================================
+   TEMPERATURE GRAPH
+========================================================= */
+
+.temperature-graph-section {
+    width: 100%;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.temperature-graph-section .section-title {
+    margin-bottom: 18px;
+}
+
+.temperature-graph-section .small-label {
+    margin: 0 0 4px 0;
+}
+
+.temperature-graph-section h2 {
+    margin: 0;
+}
+
+.temperature-graph-card {
+    width: 100%;
+    padding: 25px;
+
+    background: #101d31;
+
+    border: 1px solid #253850;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 330px;
+}
+
+#temperatureChart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+/* =========================================================
+   GRAPH MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .temperature-graph-section {
+        padding-top: 0;
+        margin-top: 0;
+    }
+
+    .temperature-graph-section .section-title {
+        margin-bottom: 14px;
+    }
+
+    .temperature-graph-card {
+        padding: 15px 10px;
+        border-radius: 16px;
+    }
+
+    .chart-wrapper {
+        height: 280px;
+    }
+}
+
+
+/* =========================================================
+   GRAPH SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .temperature-graph-card {
+        padding: 12px 7px;
+    }
+
+    .chart-wrapper {
+        height: 250px;
+    }
+}
+
+/* =========================================================
+   GRAPH MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .temperature-graph-section {
+        padding-top: 48px;
+    }
+
+    .temperature-graph-card {
+        padding: 15px 10px;
+
+        border-radius: 16px;
+    }
+
+    .chart-wrapper {
+        height: 280px;
+    }
+
+}
+
+
+/* =========================================================
+   GRAPH SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .temperature-graph-card {
+        padding: 12px 7px;
+    }
+
+    .chart-wrapper {
+        height: 250px;
+    }
+
+}
+
+/* =========================================================
+   TEMPERATURE GRAPH
+========================================================= */
+
+.temperature-graph-section {
+    width: 100%;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.temperature-graph-section .section-title {
+    margin-bottom: 18px;
+}
+
+.temperature-graph-section .small-label {
+    margin: 0 0 4px 0;
+}
+
+.temperature-graph-section h2 {
+    margin: 0;
+}
+
+.temperature-graph-card {
+    width: 100%;
+    padding: 25px;
+
+    background: #101d31;
+
+    border: 1px solid #253850;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 330px;
+}
+
+#temperatureChart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+/* =========================================================
+   GRAPH MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .temperature-graph-section {
+        padding-top: 0;
+        margin-top: 0;
+    }
+
+    .temperature-graph-section .section-title {
+        margin-bottom: 14px;
+    }
+
+    .temperature-graph-card {
+        padding: 15px 10px;
+        border-radius: 16px;
+    }
+
+    .chart-wrapper {
+        height: 280px;
+    }
+}
+
+
+/* =========================================================
+   GRAPH SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .temperature-graph-card {
+        padding: 12px 7px;
+    }
+
+    .chart-wrapper {
+        height: 250px;
+    }
+}
+
+/* =========================================================
+   GRAPH MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .temperature-graph-section {
+        padding-top: 50px;
+    }
+
+    .temperature-graph-card {
+        padding: 15px 10px;
+        border-radius: 16px;
+    }
+
+    .chart-wrapper {
+        height: 280px;
+    }
+
+}
+
+
+/* =========================================================
+   GRAPH SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .temperature-graph-card {
+        padding: 12px 7px;
+    }
+
+    .chart-wrapper {
+        height: 250px;
+    }
+
+}
+
+/* =========================================================
+   AI WEATHER ASSISTANT
+   WEATHER UI THEME
+   Navy • Blue • Sky Blue
+========================================================= */
+
+
+/* =========================================================
+   AI WEATHER SECTION
+========================================================= */
+
+.ai-weather-section {
+    margin-top: 45px;
+}
+
+.ai-weather-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    padding: 24px;
+
+    background:
+        linear-gradient(135deg,
+            #111f35,
+            #0f1b2e);
+
+    border: 1px solid #263852;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.ai-icon {
+    width: 58px;
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #38bdf8);
+
+    font-size: 1.7rem;
+
+    box-shadow:
+        0 8px 25px rgba(37, 99, 235, 0.22);
+}
+
+.ai-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.ai-content h3 {
+    color: #f8fafc;
+
+    font-size: 1rem;
+
+    margin-bottom: 5px;
+}
+
+.ai-content p {
+    color: #8fa3bd;
+
+    font-size: 0.88rem;
+
+    line-height: 1.6;
+}
+
+.ai-button {
+    flex-shrink: 0;
+
+    padding: 11px 18px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #3b82f6);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 0.82rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.2);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.ai-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.3);
+}
+
+
+/* =========================================================
+   FLOATING AI BUTTON
+========================================================= */
+
+.ai-floating-button {
+    position: fixed;
+
+    right: 28px;
+    bottom: 28px;
+
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid rgba(96, 165, 250, 0.35);
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #38bdf8);
+
+    color: #ffffff;
+
+    font-size: 28px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 30px rgba(37, 99, 235, 0.35);
+
+    z-index: 10000;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.ai-floating-button:hover {
+    transform: translateY(-4px) scale(1.05);
+
+    border-color: rgba(96, 165, 250, 0.7);
+
+    box-shadow:
+        0 15px 35px rgba(37, 99, 235, 0.5);
+}
+
+.ai-floating-button:active {
+    transform: scale(0.96);
+}
+
+
+/* =========================================================
+   CHAT WINDOW
+========================================================= */
+
+.ai-chat-window {
+    position: fixed;
+
+    right: 28px;
+    bottom: 105px;
+
+    width: 370px;
+    height: 520px;
+
+    max-width: calc(100vw - 30px);
+
+    max-height: calc(100vh - 125px);
+
+    display: flex;
+    flex-direction: column;
+
+    background: #101d31;
+
+    border: 1px solid #263852;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.35);
+
+    z-index: 9999;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform:
+        translateY(20px) scale(0.95);
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease,
+        visibility 0.25s ease;
+}
+
+
+/* =========================================================
+   CHAT WINDOW OPEN
+========================================================= */
+
+.ai-chat-window.active {
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transform:
+        translateY(0) scale(1);
+}
+
+
+/* =========================================================
+   CHAT HEADER
+========================================================= */
+
+.ai-chat-header {
+    width: 100%;
+
+    min-height: 72px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #1d4ed8);
+
+    color: #ffffff;
+
+    box-sizing: border-box;
+
+    border-bottom:
+        1px solid rgba(96, 165, 250, 0.25);
+}
+
+
+/* =========================================================
+   CHAT TITLE
+========================================================= */
+
+.ai-chat-title {
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+/* =========================================================
+   AI HEADER AVATAR
+========================================================= */
+
+.ai-avatar {
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.16);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.15);
+
+    font-size: 21px;
+
+    line-height: 1;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   CHAT TITLE TEXT
+========================================================= */
+
+.ai-chat-title strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+.ai-chat-title span {
+    display: block;
+
+    margin-top: 3px;
+
+    color:
+        rgba(255, 255, 255, 0.78);
+
+    font-size: 11px;
+
+    line-height: 1.2;
+}
+
+.ai-chat-title span::before {
+    content: "●";
+
+    margin-right: 5px;
+
+    color: #86efac;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.ai-close-button {
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    color: #ffffff;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 27px;
+
+    font-weight: 400;
+
+    line-height: 40px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.ai-close-button:hover {
+    background:
+        rgba(255, 255, 255, 0.22);
+
+    transform: scale(1.05);
+}
+
+.ai-close-button:active {
+    transform: scale(0.94);
+}
+
+
+/* =========================================================
+   MESSAGES AREA
+========================================================= */
+
+.ai-messages {
+    flex: 1;
+
+    min-height: 0;
+
+    width: 100%;
+
+    padding: 18px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background: #08111f;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MESSAGE SCROLLBAR
+========================================================= */
+
+.ai-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ai-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ai-messages::-webkit-scrollbar-thumb {
+    background: #263852;
+
+    border-radius: 20px;
+}
+
+.ai-messages::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.ai-message {
+    width: 100%;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-bottom: 16px;
+}
+
+.ai-message:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   USER MESSAGE
+========================================================= */
+
+.ai-message-user {
+    margin-left: auto;
+
+    flex-direction: row-reverse;
+}
+
+
+/* =========================================================
+   MESSAGE AVATAR
+========================================================= */
+
+.ai-message-avatar {
+    width: 30px;
+    height: 30px;
+
+    min-width: 30px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #38bdf8);
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    line-height: 1;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+
+/* =========================================================
+   MESSAGE CONTENT
+========================================================= */
+
+.ai-message-content {
+    max-width: 78%;
+
+    padding: 11px 14px;
+
+    border-radius: 15px;
+
+    background: #101d31;
+
+    border:
+        1px solid #263852;
+
+    color: #c4d0df;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+
+    word-wrap: break-word;
+
+    overflow-wrap: break-word;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   USER MESSAGE
+========================================================= */
+
+.ai-message-user .ai-message-content {
+    color: #ffffff;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #3b82f6);
+
+    border-color:
+        rgba(96, 165, 250, 0.25);
+
+    box-shadow:
+        0 6px 18px rgba(37, 99, 235, 0.2);
+}
+
+
+/* =========================================================
+   INPUT AREA
+========================================================= */
+
+.ai-chat-input-area {
+    width: 100%;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px;
+
+    border-top:
+        1px solid #263852;
+
+    background: #101d31;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CHAT INPUT
+========================================================= */
+
+#aiChatInput {
+    flex: 1;
+
+    min-width: 0;
+
+    width: 100%;
+
+    height: 42px;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid #2b3d57;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background: #08111f;
+
+    color: #f8fafc;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+#aiChatInput::placeholder {
+    color: #60748e;
+}
+
+#aiChatInput:focus {
+    border-color: #3b82f6;
+
+    background: #0b1728;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+
+/* =========================================================
+   SEND BUTTON
+========================================================= */
+
+#aiSendButton {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #3b82f6);
+
+    color: #ffffff;
+
+    font-size: 18px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 15px rgba(37, 99, 235, 0.2);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#aiSendButton:hover {
+    background:
+        linear-gradient(135deg,
+            #1d4ed8,
+            #2563eb);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+#aiSendButton:active {
+    transform: scale(0.94);
+}
+
+#aiSendButton:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   TYPING INDICATOR
+========================================================= */
+
+.ai-typing {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+}
+
+.ai-typing span {
+    width: 6px;
+    height: 6px;
+
+    display: block;
+
+    border-radius: 50%;
+
+    background: #60a5fa;
+
+    animation:
+        aiTyping 1.2s infinite;
+}
+
+.ai-typing span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.ai-typing span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes aiTyping {
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+    }
+
+    30% {
+        transform: translateY(-4px);
+    }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .ai-floating-button {
+        right: 22px;
+        bottom: 22px;
+
+        width: 58px;
+        height: 58px;
+
+        font-size: 26px;
+    }
+
+    .ai-chat-window {
+        right: 22px;
+        bottom: 95px;
+
+        width: 360px;
+
+        max-width: calc(100vw - 44px);
+
+        height: 510px;
+
+        max-height: calc(100vh - 115px);
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .ai-floating-button {
+        right: 18px;
+        bottom: 18px;
+
+        width: 58px;
+        height: 58px;
+
+        font-size: 25px;
+    }
+
+    .ai-chat-window {
+        right: 15px;
+        bottom: 88px;
+
+        width: calc(100vw - 30px);
+
+        height: 70vh;
+
+        min-height: 420px;
+
+        max-height: calc(100vh - 103px);
+
+        border-radius: 19px;
+    }
+
+    .ai-chat-header {
+        min-height: 68px;
+
+        padding:
+            13px 14px;
+    }
+
+    .ai-avatar {
+        width: 38px;
+        height: 38px;
+
+        min-width: 38px;
+
+        font-size: 19px;
+    }
+
+    .ai-chat-title {
+        gap: 9px;
+    }
+
+    .ai-chat-title strong {
+        font-size: 14px;
+    }
+
+    .ai-chat-title span {
+        font-size: 10px;
+    }
+
+    .ai-close-button {
+        width: 40px;
+        height: 40px;
+
+        min-width: 40px;
+
+        font-size: 26px;
+
+        line-height: 40px;
+    }
+
+    .ai-messages {
+        padding: 14px;
+    }
+
+    .ai-message {
+        gap: 7px;
+
+        margin-bottom: 13px;
+    }
+
+    .ai-message-avatar {
+        width: 28px;
+        height: 28px;
+
+        min-width: 28px;
+
+        font-size: 14px;
+    }
+
+    .ai-message-content {
+        max-width: 82%;
+
+        padding: 10px 12px;
+
+        border-radius: 13px;
+
+        font-size: 12.5px;
+
+        line-height: 1.5;
+    }
+
+    .ai-chat-input-area {
+        gap: 7px;
+
+        padding: 10px;
+    }
+
+    #aiChatInput {
+        height: 42px;
+
+        padding:
+            0 11px;
+
+        font-size: 13px;
+    }
+
+    #aiSendButton {
+        width: 42px;
+        height: 42px;
+
+        min-width: 42px;
+
+        border-radius: 11px;
+
+        font-size: 17px;
+    }
+
+    .ai-weather-card {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        text-align: center;
+    }
+
+    .ai-icon {
+        margin: 0 auto;
+    }
+
+    .ai-button {
+        width: 100%;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .ai-floating-button {
+        right: 14px;
+        bottom: 14px;
+
+        width: 54px;
+        height: 54px;
+
+        font-size: 23px;
+    }
+
+    .ai-chat-window {
+        right: 10px;
+        bottom: 78px;
+
+        width: calc(100vw - 20px);
+
+        height: 72vh;
+
+        min-height: 390px;
+
+        max-height: calc(100vh - 90px);
+
+        border-radius: 17px;
+    }
+
+    .ai-chat-header {
+        min-height: 64px;
+
+        padding:
+            11px 12px;
+    }
+
+    .ai-avatar {
+        width: 36px;
+        height: 36px;
+
+        min-width: 36px;
+
+        font-size: 18px;
+    }
+
+    .ai-chat-title {
+        gap: 8px;
+    }
+
+    .ai-chat-title strong {
+        font-size: 13px;
+    }
+
+    .ai-chat-title span {
+        font-size: 9px;
+    }
+
+    .ai-close-button {
+        width: 38px;
+        height: 38px;
+
+        min-width: 38px;
+
+        font-size: 24px;
+
+        line-height: 38px;
+    }
+
+    .ai-messages {
+        padding: 12px;
+    }
+
+    .ai-message-content {
+        max-width: 84%;
+
+        padding: 9px 11px;
+
+        font-size: 12px;
+    }
+
+    .ai-chat-input-area {
+        padding: 8px;
+    }
+
+    #aiChatInput {
+        height: 40px;
+
+        font-size: 12px;
+    }
+
+    #aiSendButton {
+        width: 40px;
+        height: 40px;
+
+        min-width: 40px;
+
+        font-size: 16px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 340px) {
+
+    .ai-chat-window {
+        right: 7px;
+        bottom: 72px;
+
+        width: calc(100vw - 14px);
+
+        min-height: 360px;
+    }
+
+    .ai-close-button {
+        width: 36px;
+        height: 36px;
+
+        min-width: 36px;
+
+        font-size: 23px;
+
+        line-height: 36px;
+    }
+
+    .ai-message-content {
+        max-width: 86%;
+    }
+
+    .ai-floating-button {
+        right: 10px;
+        bottom: 10px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .ai-floating-button,
+    .ai-chat-window,
+    .ai-close-button,
+    #aiSendButton {
+        transition: none !important;
+    }
+
+    .ai-typing span {
+        animation: none !important;
+    }
+
+}
+
+/* =========================================================
+   AI ASSISTANT — OPPOSITE THEME
+   Main Light  -> AI Dark
+   Main Dark   -> AI Light
+========================================================= */
+
+
+/* =========================================================
+   DEFAULT AI THEME
+   Main UI = LIGHT
+   AI UI = DARK
+========================================================= */
+
+body:not(.dark) .ai-chat-window {
+    background: #101d31;
+    border-color: #263852;
+
+    box-shadow:
+        0 20px 60px rgba(15, 23, 42, 0.25);
+}
+
+body:not(.dark) .ai-chat-header {
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #1d4ed8);
+
+    color: #ffffff;
+}
+
+body:not(.dark) .ai-messages {
+    background: #08111f;
+}
+
+body:not(.dark) .ai-message-content {
+    background: #101d31;
+    border-color: #263852;
+    color: #c4d0df;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+body:not(.dark) .ai-message-user .ai-message-content {
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #3b82f6);
+
+    border-color: rgba(96, 165, 250, 0.25);
+    color: #ffffff;
+}
+
+body:not(.dark) .ai-chat-input-area {
+    background: #101d31;
+    border-top-color: #263852;
+}
+
+body:not(.dark) #aiChatInput {
+    background: #08111f;
+    border-color: #2b3d57;
+    color: #f8fafc;
+}
+
+body:not(.dark) #aiChatInput::placeholder {
+    color: #60748e;
+}
+
+body:not(.dark) #aiChatInput:focus {
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+body:not(.dark) #aiSendButton {
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #3b82f6);
+
+    color: #ffffff;
+}
+
+body:not(.dark) #aiSendButton:hover {
+    background:
+        linear-gradient(135deg,
+            #1d4ed8,
+            #2563eb);
+}
+
+body:not(.dark) .ai-message-avatar {
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #38bdf8);
+}
+
+body:not(.dark) .ai-messages::-webkit-scrollbar-thumb {
+    background: #263852;
+}
+
+body:not(.dark) .ai-messages::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+}
+
+
+/* =========================================================
+   MAIN UI = DARK
+   AI UI = LIGHT
+========================================================= */
+
+body.dark .ai-chat-window {
+    background: #ffffff;
+    border-color: #dce5ef;
+
+    box-shadow:
+        0 20px 60px rgba(15, 23, 42, 0.20);
+}
+
+body.dark .ai-chat-header {
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #3b82f6);
+
+    color: #ffffff;
+}
+
+body.dark .ai-messages {
+    background: #f4f8fc;
+}
+
+body.dark .ai-message-content {
+    background: #ffffff;
+    border-color: #dce5ef;
+    color: #334155;
+
+    box-shadow:
+        0 3px 10px rgba(15, 23, 42, 0.06);
+}
+
+body.dark .ai-message-user .ai-message-content {
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #3b82f6);
+
+    border-color: transparent;
+    color: #ffffff;
+}
+
+body.dark .ai-chat-input-area {
+    background: #ffffff;
+    border-top-color: #dce5ef;
+}
+
+body.dark #aiChatInput {
+    background: #ffffff;
+    border-color: #d6e0eb;
+    color: #172033;
+}
+
+body.dark #aiChatInput::placeholder {
+    color: #94a3b8;
+}
+
+body.dark #aiChatInput:focus {
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+body.dark #aiSendButton {
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #3b82f6);
+
+    color: #ffffff;
+}
+
+body.dark #aiSendButton:hover {
+    background:
+        linear-gradient(135deg,
+            #1d4ed8,
+            #2563eb);
+}
+
+body.dark .ai-message-avatar {
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #38bdf8);
+}
+
+body.dark .ai-messages::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+}
+
+body.dark .ai-messages::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+
+/* =========================================================
+   AI WEATHER CARD
+   Also switches opposite to main UI
+========================================================= */
+
+
+/* Main LIGHT -> AI DARK */
+
+body:not(.dark) .ai-weather-card {
+    background:
+        linear-gradient(135deg,
+            #111f35,
+            #0f1b2e);
+
+    border-color: #263852;
+}
+
+body:not(.dark) .ai-content h3 {
+    color: #f8fafc;
+}
+
+body:not(.dark) .ai-content p {
+    color: #8fa3bd;
+}
+
+
+/* Main DARK -> AI LIGHT */
+
+body.dark .ai-weather-card {
+    background:
+        linear-gradient(135deg,
+            #ffffff,
+            #f1f6fb);
+
+    border-color: #d6e0eb;
+
+    box-shadow:
+        0 15px 40px rgba(15, 23, 42, 0.08);
+}
+
+body.dark .ai-content h3 {
+    color: #172033;
+}
+
+body.dark .ai-content p {
+    color: #64748b;
+}
+
+
+/* =========================================================
+   FLOATING BUTTON
+   Stays blue in both themes
+========================================================= */
+
+.ai-floating-button {
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #38bdf8);
+
+    border:
+        1px solid rgba(96, 165, 250, 0.35);
+
+    box-shadow:
+        0 10px 30px rgba(37, 99, 235, 0.35);
+}
+
+.ai-floating-button:hover {
+    box-shadow:
+        0 15px 35px rgba(37, 99, 235, 0.5);
+}
+
+.features-container {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    width: 100%;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.feature-card {
+    flex: 1;
+    max-width: 350px;
+}
+
+.feature-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.feature-card {
+    flex: 1;
+    max-width: 350px;
+}
+
+@media (max-width: 768px) {
+
+    .feature-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-card {
+        width: 90%;
+        max-width: 400px;
+    }
+
+}

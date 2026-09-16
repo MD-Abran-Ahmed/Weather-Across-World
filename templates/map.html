@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Weather Across World - Explore weather anywhere around the world.">
+
+    <title>Global Weather Map</title>
+
+
+    <!-- =====================================================
+         GOOGLE FONT
+    ====================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+    <!-- =====================================================
+         LEAFLET CSS
+    ====================================================== -->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+
+    <!-- =====================================================
+         MAP CSS
+    ====================================================== -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         MAP PAGE
+    ====================================================== -->
+
+    <div class="map-page">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="map-header">
+
+
+            <!-- BACK BUTTON -->
+
+            <a href="/" class="back-button">
+                ← Back to Home
+            </a>
+
+
+            <!-- TITLE -->
+
+            <h1>
+                🌍 Global Weather Map
+            </h1>
+
+
+            <!-- THEME BUTTON -->
+
+            <button id="themeButton" class="theme-button" type="button" aria-label="Toggle dark and light mode">
+                🌙
+            </button>
+
+        </header>
+
+
+        <!-- =================================================
+             SEARCH
+        ================================================== -->
+
+        <form class="map-search" id="mapSearchForm">
+
+            <label for="locationSearch" class="sr-only">
+                Search for a city or location
+            </label>
+
+            <input type="text" id="locationSearch" name="location" placeholder="Search city or location..."
+                autocomplete="off">
+
+            <button id="searchLocationButton" type="submit">
+                🔍 Search
+            </button>
+
+        </form>
+
+
+        <!-- =================================================
+             INFORMATION
+        ================================================== -->
+
+        <div class="map-info">
+
+            <h2>
+                Explore Weather Around the World
+            </h2>
+
+            <p>
+                Search for a city or click anywhere on the map
+                to explore the weather.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             MAP
+        ================================================== -->
+
+        <div id="globalWeatherMap"></div>
+
+
+    </div>
+
+    <!-- Leaflet must load BEFORE script.js because script.js initializes this map. -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
