@@ -2,6 +2,8 @@
 
 Weather Across World is a simple web application that helps you check weather information for places around the world.
 
+#### https://weather-across-world.vercel.app/
+
 You can search for a location and see its current weather conditions, temperature, humidity, wind, and other useful weather details. The project also includes an AI Weather Assistant that can help explain the weather and answer questions about it in a more natural way.
 
 The application uses a Flask backend and a web-based frontend, with Open Street Map for location/map, Weather data by Open-Meteo and Google Gemini for the AI weather assistant.
