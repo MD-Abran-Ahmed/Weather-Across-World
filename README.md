@@ -103,6 +103,7 @@ Add your own API keys:
 ```env
 GEMINI_API_KEY=your_gemini_api_key
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+GEMINI_MODELS=gemini_models
 ```
 
 **Never upload your `.env` file or API keys to GitHub.**
