@@ -1564,12 +1564,13 @@ def weather_by_location():
 @app.route("/api/config")
 def api_config():
 
-    return jsonify({
+    if not GOOGLE_MAPS_API_KEY:
+        return jsonify({
+            "error": "GOOGLE_MAPS_API_KEY is not configured."
+        }), 500
 
-        "googleMapsApiKey":
-            os.getenv(
-                "GOOGLE_MAPS_API_KEY"
-            )
+    return jsonify({
+        "googleMapsApiKey": GOOGLE_MAPS_API_KEY
     })
 
 

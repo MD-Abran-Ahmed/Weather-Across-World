@@ -2044,11 +2044,13 @@ document.addEventListener(
 
 
 // =========================================================
-// GLOBAL LEAFLET WEATHER MAP
+// GOOGLE MAPS WEATHER MAP
 // =========================================================
 
-let globalLeafletMap = null;
+let globalGoogleMap = null;
 let globalMapMarker = null;
+let globalInfoWindow = null;
+let globalGeocoder = null;
 
 
 // =========================================================
@@ -2067,224 +2069,103 @@ function escapeHTML(value) {
 
 
 // =========================================================
-// EXTRACT LOCATION PARTS
+// GOOGLE MAPS API LOADER
 // =========================================================
 
-function extractLocationParts(address) {
+async function loadGoogleMapsApi() {
 
-    if (!address) {
-        return [];
+    if (window.google?.maps) {
+        return window.google.maps;
     }
 
-    const country =
-        address.country || "";
+    const configResponse = await fetch("/api/config");
 
-    const state =
-        address.state ||
-        address.region ||
-        address.province ||
-        address.state_district ||
-        "";
-
-    const city =
-        address.city ||
-        address.town ||
-        address.village ||
-        address.municipality ||
-        address.city_district ||
-        address.county ||
-        "";
-
-    const local =
-        address.suburb ||
-        address.neighbourhood ||
-        address.neighborhood ||
-        address.residential ||
-        address.subdivision ||
-        address.subdistrict ||
-        address.quarter ||
-        address.hamlet ||
-        address.road ||
-        "";
-
-    const parts = [];
-
-    [
-        country,
-        state,
-        city,
-        local
-    ].forEach(
-        part => {
-
-            const value =
-                String(part || "").trim();
-
-            if (
-                value &&
-                !parts.some(
-                    p =>
-                        p.toLowerCase() ===
-                        value.toLowerCase()
-                )
-            ) {
-
-                parts.push(value);
-            }
-        }
-    );
-
-    return parts;
-}
-
-
-// =========================================================
-// REVERSE GEOCODING
-// =========================================================
-
-async function reverseGeocode(
-    latitude,
-    longitude
-) {
-
-    // -------------------------------------------------------
-    // Nominatim
-    // -------------------------------------------------------
-
-    try {
-
-        const response =
-            await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&addressdetails=1`,
-                {
-                    headers: {
-                        Accept:
-                            "application/json"
-                    }
-                }
-            );
-
-
-        if (response.ok) {
-
-            const data =
-                await response.json();
-
-
-            if (data?.address) {
-
-                const parts =
-                    extractLocationParts(
-                        data.address
-                    );
-
-                if (parts.length) {
-
-                    return parts.join(
-                        ", "
-                    );
-                }
-            }
-
-
-            if (data?.display_name) {
-
-                return data.display_name;
-            }
-        }
+    if (!configResponse.ok) {
+        throw new Error("Unable to load Google Maps configuration.");
     }
 
+    const config = await configResponse.json();
+    const apiKey = config.googleMapsApiKey;
 
-    catch (error) {
-
-        console.warn(
-            "Nominatim reverse geocoding failed:",
-            error
+    if (!apiKey) {
+        throw new Error(
+            "Google Maps API key is not configured. Add GOOGLE_MAPS_API_KEY to .env."
         );
     }
 
+    if (window.__googleMapsApiPromise) {
+        return window.__googleMapsApiPromise;
+    }
 
-    // -------------------------------------------------------
-    // BigDataCloud fallback
-    // -------------------------------------------------------
+    window.__googleMapsApiPromise = new Promise((resolve, reject) => {
 
-    try {
-
-        const response =
-            await fetch(
-                `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+        const existingScript =
+            document.querySelector(
+                'script[data-google-maps-loader="true"]'
             );
 
+        if (existingScript) {
+            existingScript.addEventListener(
+                "load",
+                () => resolve(window.google.maps)
+            );
+            existingScript.addEventListener(
+                "error",
+                () => reject(
+                    new Error("Google Maps JavaScript API failed to load.")
+                )
+            );
+            return;
+        }
 
-        if (response.ok) {
+        const script = document.createElement("script");
 
-            const data =
-                await response.json();
+        script.src =
+            "https://maps.googleapis.com/maps/api/js" +
+            `?key=${encodeURIComponent(apiKey)}&v=weekly`;
 
+        script.async = true;
+        script.defer = true;
+        script.dataset.googleMapsLoader = "true";
 
-            const parts =
-                extractLocationParts({
-
-                    country:
-                        data.countryName,
-
-                    state:
-                        data.principalSubdivision,
-
-                    city:
-                        data.city,
-
-                    suburb:
-                        data.locality
-                });
-
-
-            if (parts.length) {
-
-                return parts.join(
-                    ", "
+        script.onload = () => {
+            if (window.google?.maps) {
+                resolve(window.google.maps);
+            } else {
+                reject(
+                    new Error("Google Maps loaded without the Maps API.")
                 );
             }
-        }
-    }
+        };
 
+        script.onerror = () => {
+            reject(
+                new Error(
+                    "Google Maps could not be loaded. Check the API key, billing, API restrictions, and allowed website referrers."
+                )
+            );
+        };
 
-    catch (error) {
+        document.head.appendChild(script);
+    });
 
-        console.warn(
-            "Reverse geocoding fallback failed:",
-            error
-        );
-    }
-
-
-    return null;
+    return window.__googleMapsApiPromise;
 }
 
 
 // =========================================================
-// REMOVE MAP MARKER
+// GOOGLE MAP MARKER
 // =========================================================
 
 function removeGlobalMapMarker() {
 
-    if (
-        globalMapMarker &&
-        globalLeafletMap
-    ) {
-
-        globalLeafletMap.removeLayer(
-            globalMapMarker
-        );
+    if (globalMapMarker) {
+        globalMapMarker.setMap(null);
     }
 
     globalMapMarker = null;
 }
 
-
-// =========================================================
-// CREATE MAP MARKER
-// =========================================================
 
 function createGlobalMapMarker(
     latitude,
@@ -2294,20 +2175,39 @@ function createGlobalMapMarker(
     removeGlobalMapMarker();
 
     globalMapMarker =
-        L.marker([
-            latitude,
-            longitude
-        ]).addTo(
-            globalLeafletMap
-        );
+        new google.maps.Marker({
+            position: {
+                lat: latitude,
+                lng: longitude
+            },
+            map: globalGoogleMap
+        });
 
     return globalMapMarker;
 }
 
 
 // =========================================================
-// MAP POPUP - LOADING
+// GOOGLE MAP INFO WINDOW
 // =========================================================
+
+function openGlobalMapInfoWindow(content) {
+
+    if (!globalInfoWindow) {
+        globalInfoWindow =
+            new google.maps.InfoWindow();
+    }
+
+    globalInfoWindow.setContent(content);
+
+    if (globalMapMarker) {
+        globalInfoWindow.open({
+            map: globalGoogleMap,
+            anchor: globalMapMarker
+        });
+    }
+}
+
 
 function setGlobalMapPopupLoading(
     latitude,
@@ -2315,38 +2215,27 @@ function setGlobalMapPopupLoading(
     title = "Finding location..."
 ) {
 
-    if (!globalMapMarker) {
-        return;
-    }
+    openGlobalMapInfoWindow(`
 
-    globalMapMarker
-        .bindPopup(`
+        <div class="weather-popup">
 
-            <div class="weather-popup">
+            <strong>
+                📍 ${escapeHTML(title)}
+            </strong>
 
-                <strong>
-                    📍 ${escapeHTML(title)}
-                </strong>
-
-                <div>
-                    ${latitude.toFixed(4)}°,
-                    ${longitude.toFixed(4)}°
-                </div>
-
-                <div>
-                    🌡️ Getting weather...
-                </div>
-
+            <div>
+                ${latitude.toFixed(4)}°,
+                ${longitude.toFixed(4)}°
             </div>
 
-        `)
-        .openPopup();
+            <div>
+                🌡️ Getting weather...
+            </div>
+
+        </div>
+    `);
 }
 
-
-// =========================================================
-// MAP POPUP - ERROR
-// =========================================================
 
 function setGlobalMapPopupError(
     latitude,
@@ -2355,38 +2244,27 @@ function setGlobalMapPopupError(
     message
 ) {
 
-    if (!globalMapMarker) {
-        return;
-    }
+    openGlobalMapInfoWindow(`
 
-    globalMapMarker
-        .bindPopup(`
+        <div class="weather-popup">
 
-            <div class="weather-popup">
+            <strong>
+                📍 ${escapeHTML(title)}
+            </strong>
 
-                <strong>
-                    📍 ${escapeHTML(title)}
-                </strong>
-
-                <div>
-                    ${latitude.toFixed(4)}°,
-                    ${longitude.toFixed(4)}°
-                </div>
-
-                <div>
-                    ⚠️ ${escapeHTML(message)}
-                </div>
-
+            <div>
+                ${latitude.toFixed(4)}°,
+                ${longitude.toFixed(4)}°
             </div>
 
-        `)
-        .openPopup();
+            <div>
+                ⚠️ ${escapeHTML(message)}
+            </div>
+
+        </div>
+    `);
 }
 
-
-// =========================================================
-// MAP POPUP - WEATHER
-// =========================================================
 
 function setGlobalMapPopupWeather(
     latitude,
@@ -2395,96 +2273,73 @@ function setGlobalMapPopupWeather(
     data
 ) {
 
-    if (!globalMapMarker) {
-        return;
-    }
-
     const current =
         data?.current || {};
 
-
     const temperature =
         current.temperature_2m !== undefined &&
-            current.temperature_2m !== null
-
-            ? `${Math.round(
-                current.temperature_2m
-            )}°C`
-
+        current.temperature_2m !== null
+            ? `${Math.round(current.temperature_2m)}°C`
             : "N/A";
-
 
     const humidity =
         current.relative_humidity_2m !== undefined &&
-            current.relative_humidity_2m !== null
-
-            ? `${Math.round(
-                current.relative_humidity_2m
-            )}%`
-
+        current.relative_humidity_2m !== null
+            ? `${Math.round(current.relative_humidity_2m)}%`
             : "N/A";
-
 
     const wind =
         current.wind_speed_10m !== undefined &&
-            current.wind_speed_10m !== null
-
-            ? `${Math.round(
-                current.wind_speed_10m
-            )} km/h`
-
+        current.wind_speed_10m !== null
+            ? `${Math.round(current.wind_speed_10m)} km/h`
             : "N/A";
 
+    openGlobalMapInfoWindow(`
 
-    globalMapMarker
-        .bindPopup(`
+        <div class="weather-popup">
 
-            <div class="weather-popup">
+            <strong>
+                📍 ${escapeHTML(locationName)}
+            </strong>
 
-                <strong>
-                    📍 ${escapeHTML(locationName)}
-                </strong>
-
-                <div>
-                    ${latitude.toFixed(4)}°,
-                    ${longitude.toFixed(4)}°
-                </div>
-
-                <div>
-                    🌡️ Temperature:
-                    <b>${temperature}</b>
-                </div>
-
-                <div>
-                    🌤️ Condition:
-                    <b>
-                        ${escapeHTML(
-            getWeatherDescription(
-                current.weather_code
-            )
-        )}
-                    </b>
-                </div>
-
-                <div>
-                    💧 Humidity:
-                    <b>${humidity}</b>
-                </div>
-
-                <div>
-                    💨 Wind:
-                    <b>${wind}</b>
-                </div>
-
+            <div>
+                ${latitude.toFixed(4)}°,
+                ${longitude.toFixed(4)}°
             </div>
 
-        `)
-        .openPopup();
+            <div>
+                🌡️ Temperature:
+                <b>${temperature}</b>
+            </div>
+
+            <div>
+                🌤️ Condition:
+                <b>
+                    ${escapeHTML(
+                        getWeatherDescription(
+                            current.weather_code
+                        )
+                    )}
+                </b>
+            </div>
+
+            <div>
+                💧 Humidity:
+                <b>${humidity}</b>
+            </div>
+
+            <div>
+                💨 Wind:
+                <b>${wind}</b>
+            </div>
+
+        </div>
+    `);
 }
 
 
 // =========================================================
-// LOAD WEATHER FOR MAP LOCATION
+// WEATHER FOR MAP LOCATION
 // =========================================================
 
 async function loadMapWeather(
@@ -2500,39 +2355,28 @@ async function loadMapWeather(
                 `/api/weather/location?latitude=${latitude}&longitude=${longitude}`
             );
 
-
         const data =
             await response.json();
 
-
         if (!response.ok) {
-
             throw new Error(
                 data.error ||
                 "Unable to get weather for this location."
             );
         }
 
-
-        // ---------------------------------------------------
-        // Reuse normal weather dashboard
-        // ---------------------------------------------------
-
         if (
             typeof displayWeather === "function" &&
             weatherSection
         ) {
-
             displayWeather(data);
         }
-
 
         const resolvedName =
             locationName ||
             data.location?.formatted ||
             data.location?.city ||
             `Location (${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°)`;
-
 
         setGlobalMapPopupWeather(
             latitude,
@@ -2541,10 +2385,8 @@ async function loadMapWeather(
             data
         );
 
-
         return data;
     }
-
 
     catch (error) {
 
@@ -2553,16 +2395,13 @@ async function loadMapWeather(
             error
         );
 
-
         setGlobalMapPopupError(
             latitude,
             longitude,
-            locationName ||
-            "Selected Location",
+            locationName || "Selected Location",
             error.message ||
             "Weather information is unavailable."
         );
-
 
         return null;
     }
@@ -2570,7 +2409,39 @@ async function loadMapWeather(
 
 
 // =========================================================
-// SEARCH LOCATION ON GLOBAL MAP
+// GOOGLE GEOCODING HELPERS
+// =========================================================
+
+async function reverseGeocode(
+    latitude,
+    longitude
+) {
+
+    if (!globalGeocoder) {
+        globalGeocoder =
+            new google.maps.Geocoder();
+    }
+
+    const response =
+        await globalGeocoder.geocode({
+            location: {
+                lat: latitude,
+                lng: longitude
+            }
+        });
+
+    const result =
+        response.results?.[0];
+
+    return (
+        result?.formatted_address ||
+        null
+    );
+}
+
+
+// =========================================================
+// SEARCH LOCATION ON GOOGLE MAP
 // =========================================================
 
 async function searchGlobalMapLocation() {
@@ -2585,20 +2456,16 @@ async function searchGlobalMapLocation() {
             "searchLocationButton"
         );
 
-
     if (
-        !globalLeafletMap ||
+        !globalGoogleMap ||
         !searchInput ||
         !searchButton
     ) {
-
         return;
     }
 
-
     const location =
         searchInput.value.trim();
-
 
     if (!location) {
 
@@ -2611,95 +2478,59 @@ async function searchGlobalMapLocation() {
         return;
     }
 
-
-    searchButton.disabled =
-        true;
-
-    searchButton.textContent =
-        "Searching...";
-
+    searchButton.disabled = true;
+    searchButton.textContent = "Searching...";
 
     try {
 
+        // Use the app's Open-Meteo geocoder through /api/weather instead of
+        // Google Maps Geocoder. This avoids Google Geocoding API referrer
+        // restrictions (REQUEST_DENIED) while keeping the map itself on
+        // Google Maps.
         const response =
             await fetch(
-                `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=1&q=${encodeURIComponent(location)}`,
-                {
-                    headers: {
-                        Accept:
-                            "application/json"
-                    }
-                }
+                `/api/weather?city=${encodeURIComponent(location)}`
             );
 
+        const data = await response.json();
 
-        if (!response.ok) {
-
+        if (!response.ok || data.error) {
             throw new Error(
-                "Location search failed."
-            );
-        }
-
-
-        const results =
-            await response.json();
-
-
-        if (!results.length) {
-
-            alert(
+                data.error ||
+                data.message ||
                 "Location not found. Please try another city."
             );
-
-            return;
         }
 
+        const locationData = data.location || {};
+        const latitude = Number(locationData.latitude);
+        const longitude = Number(locationData.longitude);
 
-        const place =
-            results[0];
-
-
-        const latitude =
-            Number.parseFloat(
-                place.lat
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+            throw new Error(
+                "Location coordinates are unavailable. Please try another city."
             );
+        }
 
+        const displayName = [
+            locationData.city,
+            locationData.state,
+            locationData.country
+        ]
+            .filter(Boolean)
+            .join(", ") || location;
 
-        const longitude =
-            Number.parseFloat(
-                place.lon
-            );
+        globalGoogleMap.setCenter({
+            lat: latitude,
+            lng: longitude
+        });
 
-
-        const parts =
-            extractLocationParts(
-                place.address
-            );
-
-
-        const displayName =
-            parts.length
-                ? parts.join(", ")
-                : place.display_name;
-
-
-        globalLeafletMap.setView(
-            [
-                latitude,
-                longitude
-            ],
-            10,
-            {
-                animate: true
-            }
-        );
-
+        globalGoogleMap.setZoom(10);
 
         createGlobalMapMarker(
             latitude,
             longitude
         );
-
 
         setGlobalMapPopupLoading(
             latitude,
@@ -2707,14 +2538,12 @@ async function searchGlobalMapLocation() {
             displayName
         );
 
-
         await loadMapWeather(
             latitude,
             longitude,
             displayName
         );
     }
-
 
     catch (error) {
 
@@ -2729,120 +2558,207 @@ async function searchGlobalMapLocation() {
         );
     }
 
-
     finally {
 
-        searchButton.disabled =
-            false;
-
-        searchButton.textContent =
-            "🔍 Search";
+        searchButton.disabled = false;
+        searchButton.textContent = "🔍 Search";
     }
 }
 
 
 // =========================================================
-// INITIALIZE GLOBAL WEATHER MAP
+// INITIALIZE GOOGLE MAP
 // =========================================================
 
-function initializeGlobalWeatherMap() {
+async function initializeGlobalWeatherMap() {
 
     const mapElement =
         document.getElementById(
             "globalWeatherMap"
         );
 
-    // =========================================================
-    // ZOOM TO CURRENT LOCATION
-    // =========================================================
+    if (!mapElement) {
+        return;
+    }
 
-    if (navigator.geolocation) {
+    try {
 
-        navigator.geolocation.getCurrentPosition(
+        await loadGoogleMapsApi();
 
-            function (position) {
+        globalGeocoder =
+            new google.maps.Geocoder();
+
+        globalGoogleMap =
+            new google.maps.Map(
+                mapElement,
+                {
+                    center: {
+                        lat: 20,
+                        lng: 0
+                    },
+                    zoom: 2,
+                    minZoom: 2,
+                    streetViewControl: false,
+                    mapTypeControl: true,
+                    fullscreenControl: true,
+                    zoomControl: true,
+                    gestureHandling: "greedy"
+                }
+            );
+
+        globalGoogleMap.addListener(
+            "click",
+            async function (event) {
 
                 const latitude =
-                    position.coords.latitude;
+                    event.latLng.lat();
 
                 const longitude =
-                    position.coords.longitude;
+                    event.latLng.lng();
 
-                // Zoom map to current location
-                globalLeafletMap.setView(
-                    [
-                        latitude,
-                        longitude
-                    ],
-                    10,
-                    {
-                        animate: true
-                    }
-                );
-
-                // Add marker
                 createGlobalMapMarker(
                     latitude,
                     longitude
                 );
 
-                // Show loading popup
                 setGlobalMapPopupLoading(
                     latitude,
-                    longitude,
-                    "Your Current Location"
+                    longitude
                 );
 
-                // Load weather
-                loadMapWeather(
+                let locationName = null;
+
+                try {
+                    locationName =
+                        await reverseGeocode(
+                            latitude,
+                            longitude
+                        );
+                }
+
+                catch (error) {
+                    console.warn(
+                        "Google reverse geocoding failed:",
+                        error
+                    );
+                }
+
+                await loadMapWeather(
                     latitude,
                     longitude,
-                    "Your Current Location"
+                    locationName
                 );
-            },
-
-            function (error) {
-
-                console.warn(
-                    "Unable to get current location:",
-                    error
-                );
-
-                // Keep default world view
-                globalLeafletMap.setView(
-                    [20, 0],
-                    4
-                );
-            },
-
-            {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 300000
             }
         );
-    }
-    // -------------------------------------------------------
-    // IMPORTANT:
-    // This makes script.js safe for index.html,
-    // forecast.html, etc.
-    // -------------------------------------------------------
 
-    if (!mapElement) {
-        return;
-    }
+        const form =
+            document.getElementById(
+                "mapSearchForm"
+            );
 
+        if (form) {
+            form.addEventListener(
+                "submit",
+                function (event) {
+                    event.preventDefault();
+                    searchGlobalMapLocation();
+                }
+            );
+        }
 
-    // -------------------------------------------------------
-    // Check Leaflet
-    // -------------------------------------------------------
+        // Try to center on the user's location when permission is granted.
+        if (navigator.geolocation) {
 
-    if (typeof L === "undefined") {
+            navigator.geolocation.getCurrentPosition(
 
-        console.error(
-            "Leaflet is not loaded. Load leaflet.js before script.js on map.html."
+                async function (position) {
+
+                    const latitude =
+                        position.coords.latitude;
+
+                    const longitude =
+                        position.coords.longitude;
+
+                    globalGoogleMap.setCenter({
+                        lat: latitude,
+                        lng: longitude
+                    });
+
+                    globalGoogleMap.setZoom(10);
+
+                    createGlobalMapMarker(
+                        latitude,
+                        longitude
+                    );
+
+                    setGlobalMapPopupLoading(
+                        latitude,
+                        longitude,
+                        "Your Current Location"
+                    );
+
+                    let locationName = null;
+
+                    try {
+                        locationName =
+                            await reverseGeocode(
+                                latitude,
+                                longitude
+                            );
+                    }
+
+                    catch (error) {
+                        console.warn(
+                            "Current-location reverse geocoding failed:",
+                            error
+                        );
+                    }
+
+                    await loadMapWeather(
+                        latitude,
+                        longitude,
+                        locationName ||
+                        "Your Current Location"
+                    );
+                },
+
+                function (error) {
+
+                    console.warn(
+                        "Unable to get current location:",
+                        error
+                    );
+
+                },
+
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 300000
+                }
+            );
+        }
+
+        window.addEventListener(
+            "resize",
+            function () {
+                if (globalGoogleMap) {
+                    google.maps.event.trigger(
+                        globalGoogleMap,
+                        "resize"
+                    );
+                }
+            }
         );
 
+    }
+
+    catch (error) {
+
+        console.error(
+            "Google Maps initialization error:",
+            error
+        );
 
         mapElement.innerHTML = `
 
@@ -2854,174 +2770,13 @@ function initializeGlobalWeatherMap() {
                     font-weight:600;
                 "
             >
-                Map library failed to load.
-                Please refresh the page.
+                ${escapeHTML(
+                    error.message ||
+                    "Google Maps failed to load."
+                )}
             </div>
-
         `;
-
-        return;
     }
-
-
-    // -------------------------------------------------------
-    // Prevent duplicate initialization
-    // -------------------------------------------------------
-
-    if (globalLeafletMap) {
-
-        setTimeout(
-            () =>
-                globalLeafletMap.invalidateSize(),
-            0
-        );
-
-        return;
-    }
-
-
-    // -------------------------------------------------------
-    // CREATE LEAFLET MAP
-    // -------------------------------------------------------
-
-    globalLeafletMap =
-        L.map(
-            mapElement,
-            {
-
-                center: [
-                    20,
-                    0
-                ],
-
-                zoom: 4,
-
-                worldCopyJump:
-                    true,
-
-                zoomControl:
-                    true
-            }
-        );
-
-
-    // -------------------------------------------------------
-    // OPENSTREETMAP TILES
-    // -------------------------------------------------------
-
-    L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-
-            maxZoom:
-                19,
-
-            attribution:
-                "&copy; OpenStreetMap contributors"
-        }
-    ).addTo(
-        globalLeafletMap
-    );
-
-
-    // -------------------------------------------------------
-    // MAP CLICK
-    // -------------------------------------------------------
-
-    globalLeafletMap.on(
-        "click",
-        async function (event) {
-
-            const latitude =
-                event.latlng.lat;
-
-            const longitude =
-                event.latlng.lng;
-
-
-            createGlobalMapMarker(
-                latitude,
-                longitude
-            );
-
-
-            setGlobalMapPopupLoading(
-                latitude,
-                longitude
-            );
-
-
-            const locationName =
-                await reverseGeocode(
-                    latitude,
-                    longitude
-                );
-
-
-            await loadMapWeather(
-                latitude,
-                longitude,
-                locationName
-            );
-        }
-    );
-
-
-    // -------------------------------------------------------
-    // MAP SEARCH FORM
-    // -------------------------------------------------------
-
-    const form =
-        document.getElementById(
-            "mapSearchForm"
-        );
-
-
-    if (form) {
-
-        form.addEventListener(
-            "submit",
-            function (event) {
-
-                event.preventDefault();
-
-                searchGlobalMapLocation();
-            }
-        );
-    }
-
-
-    // -------------------------------------------------------
-    // FIX MAP SIZE AFTER PAGE LOAD
-    // -------------------------------------------------------
-
-    setTimeout(
-        function () {
-
-            if (globalLeafletMap) {
-
-                globalLeafletMap.invalidateSize();
-            }
-
-        },
-        100
-    );
-
-
-    // -------------------------------------------------------
-    // FIX MAP SIZE ON WINDOW RESIZE
-    // -------------------------------------------------------
-
-    window.addEventListener(
-        "resize",
-        function () {
-
-            if (globalLeafletMap) {
-
-                globalLeafletMap.invalidateSize();
-            }
-        }
-    );
 }
 
 
@@ -3031,16 +2786,11 @@ function initializeGlobalWeatherMap() {
 
 loadTheme();
 
-
-// Only initialize map on map.html.
-// index.html and forecast.html are unaffected.
-
 if (
     document.getElementById(
         "globalWeatherMap"
     )
 ) {
-
     initializeGlobalWeatherMap();
 }
 
@@ -3048,3 +2798,4 @@ if (
 console.log(
     "Weather Across World loaded successfully."
 );
+

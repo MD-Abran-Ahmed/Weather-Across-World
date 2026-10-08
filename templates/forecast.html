@@ -111,6 +111,30 @@
 
 
         <!-- =================================================
+             WEATHER SEARCH
+        ================================================== -->
+
+        <section class="forecast-search-section" aria-label="Search weather">
+            <div class="forecast-search-kicker">
+                <span class="forecast-section-label">7-DAY FORECAST PLANNER</span>
+                <h2>Search any city</h2>
+                <p>Get the latest weather and a full 7-day outlook for your destination.</p>
+            </div>
+
+            <form id="forecastSearchForm" class="search-container forecast-page-search">
+                <div class="search-input-wrapper">
+                    <span class="search-icon" aria-hidden="true">🔍</span>
+                    <input id="forecastCitySearch" name="location" type="text"
+                        placeholder="Search by city or location..." autocomplete="off" spellcheck="false">
+                </div>
+                <button id="forecastSearchButton" class="search-button" type="submit">Search</button>
+            </form>
+
+            <div id="forecastSearchStatus" class="forecast-search-status" aria-live="polite"></div>
+        </section>
+
+
+        <!-- =================================================
              LOCATION SELECTOR
         ================================================== -->
 
@@ -459,6 +483,33 @@
     </footer>
 
 
+    <!-- FLOATING AI WEATHER ASSISTANT -->
+    <button id="aiFloatingButton" class="ai-floating-button" aria-label="Open Weather AI">✦</button>
+
+    <div id="aiChatWindow" class="ai-chat-window">
+        <div class="ai-chat-header">
+            <div class="ai-chat-title">
+                <div class="ai-avatar">✦</div>
+                <div><strong>Weather AI</strong><span>Online</span></div>
+            </div>
+            <button id="aiCloseButton" class="ai-close-button" aria-label="Close">×</button>
+        </div>
+        <div id="aiMessages" class="ai-messages">
+            <div class="ai-message ai-message-bot">
+                <div class="ai-message-avatar">✦</div>
+                <div class="ai-message-content">
+                    Hi! 👋 I'm your Weather AI.<br><br>
+                    Ask me anything about weather, forecasts, travel, or this trip planner.
+                </div>
+            </div>
+        </div>
+        <div class="ai-chat-input-area">
+            <input type="text" id="aiChatInput" placeholder="Ask about the weather..." autocomplete="off">
+            <button id="aiSendButton" aria-label="Send">➤</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/forecast.js') }}"></script>
 
 </body>

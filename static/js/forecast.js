@@ -82,6 +82,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const forecastNavLinks =
         document.getElementById("forecastNavLinks");
 
+    const forecastSearchForm =
+        document.getElementById("forecastSearchForm");
+
+    const forecastCitySearch =
+        document.getElementById("forecastCitySearch");
+
+    const forecastSearchButton =
+        document.getElementById("forecastSearchButton");
+
+    const forecastSearchStatus =
+        document.getElementById("forecastSearchStatus");
+
 
     // =========================================================
     // STATE
@@ -764,6 +776,94 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     );
 
+
+    // =========================================================
+    // DIRECT WEATHER SEARCH
+    // =========================================================
+
+    async function loadForecastForSearch(query) {
+
+        const locationQuery = String(query || "").trim();
+
+        if (!locationQuery) {
+            if (forecastSearchStatus) {
+                forecastSearchStatus.textContent = "Enter a city to search.";
+            }
+            return;
+        }
+
+        hideError();
+
+        if (forecastSearchButton) {
+            forecastSearchButton.disabled = true;
+            forecastSearchButton.textContent = "Searching...";
+        }
+
+        if (forecastSearchStatus) {
+            forecastSearchStatus.textContent = "Getting current weather and 7-day forecast...";
+        }
+
+        try {
+            const response = await fetch(
+                `/api/weather?city=${encodeURIComponent(locationQuery)}`
+            );
+
+            const data = await response.json();
+
+            if (!response.ok || data.error) {
+                throw new Error(
+                    data.message || data.error || "Unable to find this city."
+                );
+            }
+
+            const weather = data.weather || data;
+            latestWeatherData = {
+                location: data.location || {},
+                current: weather.current || {},
+                daily: weather.daily || {}
+            };
+
+            selectedCity = data.location?.name || locationQuery.split(",")[0].trim();
+            selectedState = data.location?.admin1 || "";
+            selectedCountry = data.location?.country || "";
+
+            destinationCoordinates = {
+                latitude: Number(data.location?.latitude),
+                longitude: Number(data.location?.longitude)
+            };
+
+            renderForecast(latestWeatherData);
+            generateTripGuide(latestWeatherData);
+            generatePackingAdvice(latestWeatherData);
+            await loadFamousPlaces();
+
+            if (forecastSearchStatus) {
+                forecastSearchStatus.textContent =
+                    `Showing weather for ${[selectedCity, selectedState, selectedCountry].filter(Boolean).join(", ")}.`;
+            }
+
+            setStatus("Forecast and trip guide loaded successfully.");
+
+        } catch (error) {
+            console.error("Weather search error:", error);
+            showError(error.message || "Unable to load weather.");
+            if (forecastSearchStatus) {
+                forecastSearchStatus.textContent = error.message || "Unable to load weather.";
+            }
+        } finally {
+            if (forecastSearchButton) {
+                forecastSearchButton.disabled = false;
+                forecastSearchButton.textContent = "Search";
+            }
+        }
+    }
+
+    if (forecastSearchForm) {
+        forecastSearchForm.addEventListener("submit", event => {
+            event.preventDefault();
+            loadForecastForSearch(forecastCitySearch?.value);
+        });
+    }
 
     // =========================================================
     // GET FORECAST

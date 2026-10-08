@@ -23,23 +23,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 
-    <!-- =====================================================
-         LEAFLET CSS
-    ====================================================== -->
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
 
     <!-- =====================================================
          MAP CSS
     ====================================================== -->
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+
+
+
 
 </head>
 
 
 <body>
+
+
+    <header class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🌍</span>
+                <span>Weather Across World</span>
+            </a>
+            <nav id="mainNavLinks" class="nav-links">
+                <a href="/">Home</a>
+                <a href="/#weatherSection">Current Weather</a>
+                <a href="/forecast">Forecast &amp; Trip Planner</a>
+                <a href="/#about">About</a>
+            </nav>
+            <button id="themeButton" class="theme-button desktop-theme-button" type="button"
+                aria-label="Toggle theme">🌙</button>
+            <button id="mainMenuButton" class="menu-button" type="button" aria-label="Open menu" aria-expanded="false"
+                aria-controls="mainNavLinks">
+                <span class="menu-open-icon" aria-hidden="true">☰</span>
+                <span class="menu-close-icon" aria-hidden="true">×</span>
+            </button>
+        </div>
+    </header>
 
 
     <!-- =====================================================
@@ -49,70 +70,22 @@
     <div class="map-page">
 
 
-        <!-- =================================================
-             HEADER
-        ================================================== -->
-
-        <header class="map-header">
-
-
-            <!-- BACK BUTTON -->
-
-            <a href="/" class="back-button">
-                ← Back to Home
-            </a>
-
-
-            <!-- TITLE -->
-
-            <h1>
-                🌍 Global Weather Map
-            </h1>
-
-
-            <!-- MOBILE MENU -->
-
-            <button id="mapDesktopThemeToggle" class="theme-button map-desktop-theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
-
-            <button
-                id="mapMenuButton"
-                class="map-menu-button"
-                type="button"
-                aria-label="Open menu"
-                aria-expanded="false"
-                aria-controls="mapNavLinks">
-                <span class="menu-open-icon" aria-hidden="true">☰</span>
-                <span class="menu-close-icon" aria-hidden="true">×</span>
-            </button>
-
-        </header>
-
-        <nav id="mapNavLinks" class="map-nav-links" aria-label="Site navigation">
-            <a href="#" id="mapThemeToggle" class="mobile-theme" aria-label="Toggle theme">🌙 Theme</a>
-            <a href="/">Home</a>
-            <a href="/#weatherSection">Current Weather</a>
-            <a href="/map">Weather Map</a>
-            <a href="/forecast">Forecast &amp; Trip Planner</a>
-            <a href="/#about">About</a>
-        </nav>
 
 
         <!-- =================================================
              SEARCH
         ================================================== -->
 
-        <form class="map-search" id="mapSearchForm">
+        <form class="search-container map-page-search" id="mapSearchForm">
 
-            <label for="locationSearch" class="sr-only">
-                Search for a city or location
-            </label>
+            <div class="search-input-wrapper">
+                <span class="search-icon" aria-hidden="true">🔍</span>
+                <label for="locationSearch" class="sr-only">Search by city or location</label>
+                <input type="text" id="locationSearch" name="location" placeholder="Search by city..."
+                    autocomplete="off">
+            </div>
 
-            <input type="text" id="locationSearch" name="location" placeholder="Search city or location..."
-                autocomplete="off">
-
-            <button id="searchLocationButton" type="submit">
-                🔍 Search
-            </button>
+            <button id="searchLocationButton" class="search-button" type="submit">Search</button>
 
         </form>
 
@@ -142,10 +115,44 @@
         <div id="globalWeatherMap"></div>
 
 
+
+
+
     </div>
 
-    <!-- Leaflet must load BEFORE script.js because script.js initializes this map. -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <footer class="map-footer">
+        <div class="map-footer-content">
+            <p>Weather data powered by <strong>Google Maps | Open-Meteo</strong></p>
+            <p>© Abran | 2026</p>
+        </div>
+    </footer>
+
+    <!-- FLOATING AI WEATHER ASSISTANT -->
+    <button id="aiFloatingButton" class="ai-floating-button" aria-label="Open Weather AI">✦</button>
+
+    <div id="aiChatWindow" class="ai-chat-window">
+        <div class="ai-chat-header">
+            <div class="ai-chat-title">
+                <div class="ai-avatar">✦</div>
+                <div><strong>Weather AI</strong><span>Online</span></div>
+            </div>
+            <button id="aiCloseButton" class="ai-close-button" aria-label="Close">×</button>
+        </div>
+        <div id="aiMessages" class="ai-messages">
+            <div class="ai-message ai-message-bot">
+                <div class="ai-message-avatar">✦</div>
+                <div class="ai-message-content">
+                    Hi! 👋 I'm your Weather AI.<br><br>
+                    Ask me anything about weather, forecasts, travel, or the map.
+                </div>
+            </div>
+        </div>
+        <div class="ai-chat-input-area">
+            <input type="text" id="aiChatInput" placeholder="Ask about the weather..." autocomplete="off">
+            <button id="aiSendButton" aria-label="Send">➤</button>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
