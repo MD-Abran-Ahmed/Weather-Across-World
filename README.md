@@ -4,7 +4,7 @@ A full-stack weather and travel planning web application that lets users explore
 
 ## 🚀 Live Demo
 
-**[Weather Across World](https://weather-across-world-ten.vercel.app/)**
+**[Weather Across World](https://weather-across-world.vercel.app/)**
 
 ## ✨ Features
 
